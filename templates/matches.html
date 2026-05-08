@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Matches</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1 style="text-align:center;">⚽ Matches</h1>
+
+    <div class="container">
+        <div class="left">
+
+            {% for match in matches %}
+                <div class="card">
+                    <b>📍 {{ match.location }}</b><br>
+                    ⏰ {{ match.time }} <br>
+
+                    👥 {{ match.joined|length }}/{{ match.players }}
+
+                    <br><br>
+
+                    <b>Players:</b><br>
+                    {% for player in match.joined %}
+                        {{ player }}<br>
+                    {% endfor %}
+
+                    <form action="/join/{{ match.id }}" method="post">
+                        <input type="text" name="name" placeholder="Your name">
+                        <button type="submit">Join</button>
+                    </form>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <a href="/">Back</a>
+</body>
+</html>

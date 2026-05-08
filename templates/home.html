@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kickoff - Home</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+    <div class="top-bar">
+        <a href="/profile">👤 Profile</a>
+    </div>
+
+    <h1 style="text-align:center;">⚽ Kickoff</h1>
+
+    <div class="container">
+
+        <!-- LEFT: MATCHES -->
+        <div class="left">
+            <h2>Create Match</h2>
+
+            <form action="/create_match" method="post">
+                <input type="text" name="location" placeholder="Location">
+                <input type="text" name="time" placeholder="Time (e.g. 2026-05-10)">
+                <input type="number" name="players" placeholder="Max Players (11)">
+                <button type="submit">Create Match</button>
+            </form>
+
+            <h2>Matches</h2>
+            <a href="/matches">View All Matches</a>
+        </div>
+
+        <!-- RIGHT: STATS -->
+        <div class="right">
+            <h2>Stats</h2>
+            <p>Matches Played: 0</p>
+            <p>Win Rate: --</p>
+        </div>
+
+    </div>
+</body>
+</html>
