@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Kickoff - Home</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
-    <div class="top-bar">
-        <a href="/profile">👤 Profile</a>
-    </div>
 
-    <h1 style="text-align:center;">⚽ Kickoff</h1>
+<body>
+
+    <h1>⚽ Kickoff</h1>
 
     <div class="container">
 
-        <!-- LEFT: MATCHES -->
-        <div class="left">
+        <!-- CREATE MATCH CARD -->
+        <div class="card">
             <h2>Create Match</h2>
 
             <form action="/create_match" method="post">
@@ -24,18 +24,32 @@
                 <input type="number" name="players" placeholder="Max Players (11)">
                 <button type="submit">Create Match</button>
             </form>
-
-            <h2>Matches</h2>
-            <a href="/matches">View All Matches</a>
         </div>
 
-        <!-- RIGHT: STATS -->
-        <div class="right">
+        <!-- MATCHES CARD -->
+        <div class="card">
+            <h2>Matches</h2>
+            <a href="/matches" style="color:#ff7a00; text-decoration:none;">
+                View All Matches
+            </a>
+        </div>
+
+        <!-- STATS CARD -->
+        <div class="card">
             <h2>Stats</h2>
             <p>Matches Played: 0</p>
             <p>Win Rate: --</p>
         </div>
 
     </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <a href="/">Home</a>
+        <a href="/matches">Matches</a>
+        <a href="/stats">Stats</a>
+        <a href="/profile">Profile</a>
+    </div>
+
 </body>
 </html>
