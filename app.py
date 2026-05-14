@@ -495,30 +495,9 @@ def home():
 @login_required
 def notifications():
 
-    notifications = [
-        {
-            "title": "Match chat is ready",
-            "body": "Joined matches now have a group chat for players and hosts.",
-            "time": "Now",
-            "kind": "chat"
-        },
-        {
-            "title": "Lineup window",
-            "body": "Hosts can edit lineups 15 minutes before kickoff.",
-            "time": "MVP",
-            "kind": "lineup"
-        },
-        {
-            "title": "Club badges added",
-            "body": "Pick your club badge from your profile editor.",
-            "time": "New",
-            "kind": "profile"
-        }
-    ]
-
     return render_template(
         "notifications.html",
-        notifications=notifications
+        notifications=[]
     )
 
 
