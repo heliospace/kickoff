@@ -22,6 +22,37 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
+DEFAULT_AVATAR = "man1.png"
+AVATAR_OPTIONS = [
+    "man1.png", "man2.png", "man3.png", "man4.png",
+    "man5.png", "man6.png", "man7.png", "man8.png",
+    "man9.png", "man10.png", "man11.png", "man12.png",
+    "man13.png", "man14.png", "man15.png", "man16.png",
+    "girl1.png", "girl2.png", "girl3.png", "girl4.png", "girl5.png"
+]
+LEGACY_AVATARS = {
+    "barca.png",
+    "realmadrid.png",
+    "juventus.png",
+    "italy.png",
+    "portugal.png"
+}
+CLUB_OPTIONS = [
+    {"name": "Argentina", "logo": "argentina.png"},
+    {"name": "Atletico", "logo": "atletico.png"},
+    {"name": "Barcelona", "logo": "barcelona.png"},
+    {"name": "Bayern", "logo": "bayern.png"},
+    {"name": "Brazil", "logo": "brazil.png"},
+    {"name": "India", "logo": "india.png"},
+    {"name": "Liverpool", "logo": "liverpool.png"},
+    {"name": "Manchester United", "logo": "manchesteru.png"},
+    {"name": "Portugal", "logo": "portugal.png"}
+]
+CLUB_BY_LOGO = {
+    club["logo"]: club
+    for club in CLUB_OPTIONS
+}
+
 LINEUP_FORMATIONS = {
     "4-3-3": [
         {"key": "gk", "label": "GK", "x": 50, "y": 86},
@@ -82,11 +113,12 @@ class User(UserMixin, db.Model):
     position = db.Column(db.String(100), default="")
     location = db.Column(db.String(100), default="")
     favorite_club = db.Column(db.String(100), default="")
+    club_logo = db.Column(db.String(100), default="")
     fan_label = db.Column(db.String(100), default="")
     player_level = db.Column(db.String(100), default="")
 
     # avatar system
-    avatar = db.Column(db.String(100), default="barca.png")
+    avatar = db.Column(db.String(100), default=DEFAULT_AVATAR)
 
     matches_created = db.relationship("Match", back_populates="creator")
     screenings_hosted = db.relationship("Screening", back_populates="creator")
@@ -172,6 +204,20 @@ class MatchParticipant(db.Model):
 
 
 # =========================
+# MATCH MESSAGE MODEL
+# =========================
+class MatchMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    match_id = db.Column(db.Integer, db.ForeignKey("match.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    match = db.relationship("Match", backref="messages")
+    user = db.relationship("User")
+
+
+# =========================
 # LINEUP SLOT MODEL
 # =========================
 class LineupSlot(db.Model):
@@ -213,11 +259,17 @@ with app.app_context():
     add_column_if_missing("user", "position", "VARCHAR(100) DEFAULT ''")
     add_column_if_missing("user", "location", "VARCHAR(100) DEFAULT ''")
     add_column_if_missing("user", "favorite_club", "VARCHAR(100) DEFAULT ''")
+    add_column_if_missing("user", "club_logo", "VARCHAR(100) DEFAULT ''")
     add_column_if_missing("user", "fan_label", "VARCHAR(100) DEFAULT ''")
     add_column_if_missing("user", "player_level", "VARCHAR(100) DEFAULT ''")
     add_column_if_missing("match", "starts_at", "DATETIME")
     add_column_if_missing("match", "formation", "VARCHAR(20) DEFAULT '4-3-3'")
     add_column_if_missing("screening", "starts_at", "DATETIME")
+    User.query.filter(User.avatar.in_(LEGACY_AVATARS)).update(
+        {User.avatar: DEFAULT_AVATAR},
+        synchronize_session=False
+    )
+    db.session.commit()
 
 
 # =========================
@@ -252,6 +304,16 @@ def can_edit_lineup(match):
         return False
 
     return datetime.now() >= match.starts_at - timedelta(minutes=15)
+
+
+def can_access_match_chat(match):
+    if match.user_id == current_user.id:
+        return True
+
+    return MatchParticipant.query.filter_by(
+        user_id=current_user.id,
+        match_id=match.id
+    ).first() is not None
 
 
 def get_lineup_players(match):
@@ -291,6 +353,7 @@ def get_match_feed_context(matches):
     } if participants else {}
 
     participant_names = {match.id: [] for match in matches}
+    participant_users = {match.id: [] for match in matches}
     joined_match_ids = set()
 
     seen_pairs = set()
@@ -306,6 +369,7 @@ def get_match_feed_context(matches):
 
         if user:
             participant_names.setdefault(participant.match_id, []).append(user.username)
+            participant_users.setdefault(participant.match_id, []).append(user)
 
         if participant.user_id == current_user.id:
             joined_match_ids.add(participant.match_id)
@@ -316,6 +380,7 @@ def get_match_feed_context(matches):
     return {
         "matches": matches,
         "participant_names": participant_names,
+        "participant_users": participant_users,
         "joined_match_ids": joined_match_ids
     }
 
@@ -420,6 +485,40 @@ def home():
         user=current_user,
         live_scores=live_scores,
         **feed_context
+    )
+
+
+# =========================
+# NOTIFICATIONS
+# =========================
+@app.route("/notifications")
+@login_required
+def notifications():
+
+    notifications = [
+        {
+            "title": "Match chat is ready",
+            "body": "Joined matches now have a group chat for players and hosts.",
+            "time": "Now",
+            "kind": "chat"
+        },
+        {
+            "title": "Lineup window",
+            "body": "Hosts can edit lineups 15 minutes before kickoff.",
+            "time": "MVP",
+            "kind": "lineup"
+        },
+        {
+            "title": "Club badges added",
+            "body": "Pick your club badge from your profile editor.",
+            "time": "New",
+            "kind": "profile"
+        }
+    ]
+
+    return render_template(
+        "notifications.html",
+        notifications=notifications
     )
 
 
@@ -615,6 +714,51 @@ def join_match(match_id):
 # =========================
 # MATCH LINEUP
 # =========================
+@app.route("/match/<int:match_id>/chat", methods=["GET", "POST"])
+@login_required
+def match_chat(match_id):
+
+    match = db.session.get(Match, match_id)
+
+    if not match:
+        flash("Match not found.", "error")
+        return redirect("/matches")
+
+    if not can_access_match_chat(match):
+        flash("Join the match to play and chat.", "info")
+        return redirect("/matches")
+
+    if request.method == "POST":
+        body = request.form.get("body", "").strip()
+
+        if not body:
+            flash("Message cannot be empty.", "error")
+            return redirect(f"/match/{match.id}/chat")
+
+        if len(body) > 500:
+            flash("Message is too long.", "error")
+            return redirect(f"/match/{match.id}/chat")
+
+        db.session.add(MatchMessage(
+            match_id=match.id,
+            user_id=current_user.id,
+            body=body
+        ))
+        db.session.commit()
+
+        return redirect(f"/match/{match.id}/chat")
+
+    messages = MatchMessage.query.filter_by(
+        match_id=match.id
+    ).order_by(MatchMessage.created_at.asc()).all()
+
+    return render_template(
+        "match_chat.html",
+        match=match,
+        messages=messages
+    )
+
+
 @app.route("/match/<int:match_id>/lineup")
 @login_required
 def view_lineup(match_id):
@@ -751,7 +895,34 @@ def profile():
         user=current_user,
         user_matches=user_matches,
         joined_matches=joined_matches,
-        hosted_screenings=hosted_screenings
+        hosted_screenings=hosted_screenings,
+        avatar_options=AVATAR_OPTIONS,
+        club_options=CLUB_OPTIONS
+    )
+
+
+# =========================
+# PUBLIC USER PROFILE
+# =========================
+@app.route("/user/<username>")
+@login_required
+def public_profile(username):
+
+    user = User.query.filter_by(username=username).first_or_404()
+    matches_created = Match.query.filter_by(user_id=user.id).count()
+    matches_joined = MatchParticipant.query.filter_by(user_id=user.id).count()
+    screenings_hosted = Screening.query.filter_by(user_id=user.id).count()
+    xp = matches_created * 20 + matches_joined * 10 + screenings_hosted * 20
+    level = (xp // 100) + 1
+
+    return render_template(
+        "public_profile.html",
+        profile_user=user,
+        matches_created=matches_created,
+        matches_joined=matches_joined,
+        screenings_hosted=screenings_hosted,
+        xp=xp,
+        level=level
     )
 
 
@@ -764,9 +935,11 @@ def update_avatar():
 
     selected = request.form.get("avatar")
 
-    if selected:
+    if selected in AVATAR_OPTIONS:
         current_user.avatar = selected
         db.session.commit()
+    else:
+        flash("Invalid avatar selected.", "error")
 
     return redirect("/profile")
 
@@ -870,7 +1043,7 @@ def signup():
             name=request.form.get("name", "").strip(),
             username=username,
             password=password,
-            avatar="barca.png"
+            avatar=DEFAULT_AVATAR
         )
 
         db.session.add(new_user)
@@ -894,7 +1067,15 @@ def update_profile():
     current_user.name = request.form.get("name", "").strip()
     current_user.position = request.form.get("position", "").strip()
     current_user.location = request.form.get("location", "").strip()
-    current_user.favorite_club = request.form.get("favorite_club", "").strip()
+    selected_club_logo = request.form.get("club_logo", "").strip()
+
+    if selected_club_logo in CLUB_BY_LOGO:
+        current_user.club_logo = selected_club_logo
+        current_user.favorite_club = CLUB_BY_LOGO[selected_club_logo]["name"]
+    elif not selected_club_logo:
+        current_user.club_logo = ""
+        current_user.favorite_club = ""
+
     current_user.fan_label = request.form.get("fan_label", "").strip()
     current_user.player_level = request.form.get("player_level", "").strip()
     db.session.commit()

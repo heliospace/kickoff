@@ -8,6 +8,121 @@ body {
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+.auth-page {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% -10%, rgba(255,255,255,0.08), transparent 30%),
+        radial-gradient(circle at 18% 18%, rgba(255,122,0,0.08), transparent 28%),
+        linear-gradient(145deg, #171717 0%, #050505 56%, #111111 100%),
+        #080808;
+}
+
+.auth-page .logo-container,
+.auth-page .container,
+.auth-page .flash-stack {
+    position: relative;
+    z-index: 2;
+}
+
+.auth-page .match-card {
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.085), rgba(255,255,255,0.025)),
+        rgba(20,20,20,0.84);
+    border: 1px solid rgba(210,210,210,0.13);
+    box-shadow:
+        0 24px 70px rgba(0,0,0,0.48),
+        inset 0 0 0 1px rgba(255,255,255,0.035);
+    backdrop-filter: blur(18px);
+}
+
+.auth-page .match-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.auth-page .match-card h2 {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.auth-page .match-card::before,
+.auth-page .match-card::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    image-rendering: pixelated;
+}
+
+.auth-page .match-card::before {
+    inset: 10px;
+    border: 1px solid rgba(180,180,180,0.12);
+    opacity: 0.8;
+}
+
+.auth-page .match-card::after {
+    inset: 0;
+    background:
+        linear-gradient(rgba(155,155,155,0.62) 0 0) 0 0 / 18px 3px no-repeat,
+        linear-gradient(rgba(155,155,155,0.62) 0 0) 0 0 / 3px 18px no-repeat,
+        linear-gradient(rgba(155,155,155,0.48) 0 0) 30px 0 / 8px 3px no-repeat,
+        linear-gradient(rgba(155,155,155,0.62) 0 0) 0 100% / 18px 3px no-repeat,
+        linear-gradient(rgba(155,155,155,0.62) 0 0) 0 100% / 3px 18px no-repeat,
+        linear-gradient(rgba(155,155,155,0.62) 0 0) 100% 0 / 18px 3px no-repeat,
+        linear-gradient(rgba(155,155,155,0.62) 0 0) 100% 0 / 3px 18px no-repeat,
+        linear-gradient(rgba(255,122,0,0.7) 0 0) 100% 100% / 22px 3px no-repeat,
+        linear-gradient(rgba(255,122,0,0.7) 0 0) 100% 100% / 3px 22px no-repeat;
+    opacity: 0.58;
+}
+
+.auth-pixel-bg {
+    position: fixed;
+    inset: 18px;
+    z-index: 0;
+    pointer-events: none;
+    border: 1px solid rgba(210,210,210,0.08);
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.03),
+        0 0 70px rgba(0,0,0,0.35);
+}
+
+.auth-pixel-bg::before,
+.auth-pixel-bg::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    image-rendering: pixelated;
+}
+
+.auth-pixel-bg::before {
+    inset: -6px;
+    border: 4px solid transparent;
+    border-image:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0 14px,
+            rgba(150,150,150,0.42) 14px 20px,
+            transparent 20px 34px,
+            rgba(92,92,92,0.32) 34px 40px
+        ) 8;
+    opacity: 0.72;
+}
+
+.auth-pixel-bg::after {
+    inset: 12px;
+    border: 1px solid rgba(255,255,255,0.045);
+    background:
+        linear-gradient(rgba(255,122,0,0.65) 0 0) 24px 0 / 18px 3px no-repeat,
+        linear-gradient(rgba(130,130,130,0.45) 0 0) calc(100% - 48px) 0 / 28px 3px no-repeat,
+        linear-gradient(rgba(130,130,130,0.36) 0 0) 0 calc(100% - 42px) / 3px 28px no-repeat,
+        linear-gradient(rgba(255,122,0,0.55) 0 0) 100% calc(100% - 60px) / 3px 42px no-repeat;
+}
+
 /* =========================
    TYPOGRAPHY
 ========================= */
@@ -35,6 +150,188 @@ h1 {
 
 .logo {
     width: 120px;
+}
+
+.home-topbar {
+    display: grid;
+    grid-template-columns: 44px 1fr 44px;
+    align-items: center;
+    width: min(520px, calc(100% - 30px));
+    margin: 18px auto 4px;
+}
+
+.home-topbar .logo {
+    justify-self: center;
+}
+
+.notification-bell {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: end;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: white;
+    text-decoration: none;
+}
+
+.bell-icon-img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    display: block;
+}
+
+.bell-icon {
+    position: relative;
+    display: inline-block;
+    width: 18px;
+    height: 20px;
+    color: currentColor;
+    border: 3px solid currentColor;
+    border-bottom: 0;
+    border-radius: 10px 10px 4px 4px;
+}
+
+.bell-icon::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -7px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 3px solid currentColor;
+    border-bottom: 0;
+    transform: translateX(-50%);
+}
+
+.bell-icon::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -7px;
+    width: 8px;
+    height: 4px;
+    border-radius: 0 0 8px 8px;
+    background: currentColor;
+    transform: translateX(-50%);
+}
+
+.notification-dot {
+    position: absolute;
+    right: 9px;
+    top: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff7a00;
+    box-shadow: 0 0 12px rgba(255,122,0,0.72);
+}
+
+/* =========================
+   CREATE CHOICE PAGE
+========================= */
+
+.create-choice-page {
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: #050505;
+}
+
+.create-choice-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.2) 48%, rgba(0,0,0,0.82)),
+        radial-gradient(circle at 50% 38%, rgba(255,255,255,0.08), transparent 32%),
+        url("/static/images/create-page-pixel-bg.png") center / cover no-repeat;
+}
+
+.create-choice-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(0,0,0,0.88), transparent 16%, transparent 84%, rgba(0,0,0,0.88)),
+        repeating-linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.03) 0 1px,
+            transparent 1px 5px
+        );
+    mix-blend-mode: screen;
+    opacity: 0.5;
+}
+
+.create-choice-header,
+.create-choice-shell {
+    position: relative;
+    z-index: 1;
+}
+
+.create-choice-header {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px;
+    align-items: center;
+    width: min(520px, calc(100% - 30px));
+    margin: 18px auto 0;
+}
+
+.create-choice-header .logo {
+    justify-self: center;
+}
+
+.create-choice-shell {
+    width: min(520px, calc(100% - 30px));
+    margin: 24px auto 118px;
+}
+
+.create-choice-hero {
+    margin-bottom: 18px;
+    padding: 20px;
+    border-radius: 26px;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03)),
+        rgba(18,18,18,0.58);
+    border: 1px solid rgba(255,255,255,0.09);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.36);
+}
+
+.create-choice-hero h1 {
+    margin: 5px 0 4px;
+    color: white;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 40px;
+    font-weight: 900;
+    text-align: left;
+}
+
+.create-choice-hero p {
+    margin: 0;
+    color: #bdbdbd;
+    font-size: 14px;
+}
+
+.create-choice-card {
+    background:
+        radial-gradient(circle at top right, rgba(255,122,0,0.18), transparent 38%),
+        linear-gradient(145deg, rgba(28,28,28,0.82), rgba(16,16,16,0.72));
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(12px);
+}
+
+.screening-choice-card {
+    background:
+        radial-gradient(circle at top right, rgba(184,76,255,0.22), transparent 38%),
+        linear-gradient(145deg, rgba(31,20,38,0.84), rgba(16,16,16,0.72));
 }
 
 /* =========================
@@ -181,6 +478,359 @@ button {
     display: inline-block;
     margin-top: 8px;
     text-decoration: none;
+}
+
+/* =========================
+   PUBLIC PROFILE
+========================= */
+
+.public-profile-shell {
+    width: min(460px, calc(100% - 30px));
+    margin: 22px auto;
+    padding-bottom: 40px;
+}
+
+.public-profile-card {
+    position: relative;
+    overflow: hidden;
+    margin-top: 18px;
+    padding: 28px 20px;
+    border-radius: 30px;
+    background:
+        radial-gradient(circle at top right, rgba(255,122,0,0.24), transparent 42%),
+        linear-gradient(145deg, #1c1c1c, #252525);
+    border: 1px solid rgba(255,255,255,0.08);
+    text-align: center;
+    box-shadow: 0 22px 60px rgba(0,0,0,0.42);
+}
+
+.public-glow {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 18px 18px;
+    opacity: 0.24;
+    pointer-events: none;
+}
+
+.public-avatar-wrap {
+    position: relative;
+    width: 118px;
+    height: 118px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(145deg, #ff7a00, #ffd166);
+}
+
+.public-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #222;
+}
+
+.public-profile-card h1 {
+    position: relative;
+    margin: 0;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+.public-meta {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 14px 0;
+    color: #aaa;
+    font-size: 13px;
+}
+
+.public-meta span {
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+}
+
+.public-club-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0;
+    padding: 14px;
+    border-radius: 20px;
+    background:
+        radial-gradient(circle at top right, rgba(255,122,0,0.18), transparent 44%),
+        rgba(255,255,255,0.07);
+    text-align: left;
+}
+
+.public-level,
+.public-stat-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.public-level > div,
+.public-stat-grid > div {
+    padding: 14px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.07);
+}
+
+.public-level strong,
+.public-stat-grid strong {
+    color: #ff7a00;
+    font-size: 24px;
+}
+
+.public-stat-grid {
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 10px;
+}
+
+.public-stat-grid span {
+    display: block;
+    margin-top: 4px;
+    color: #aaa;
+    font-size: 12px;
+}
+
+/* =========================
+   MATCH CHAT
+========================= */
+
+.chat-shell {
+    width: min(520px, calc(100% - 30px));
+    margin: 20px auto 110px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 14px;
+    color: #aaa;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.chat-room {
+    overflow: hidden;
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background:
+        radial-gradient(circle at top right, rgba(255,122,0,0.14), transparent 36%),
+        linear-gradient(145deg, #191919, #252525);
+    box-shadow: 0 22px 60px rgba(0,0,0,0.42);
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.chat-kicker {
+    color: #ff7a00;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.chat-header h1 {
+    margin: 5px 0 4px;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: white;
+    text-align: left;
+}
+
+.chat-header p {
+    margin: 0;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.chat-header-icon {
+    margin-top: 8px;
+    color: #ff7a00;
+    transform: scale(1.25);
+}
+
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 300px;
+    max-height: 52vh;
+    overflow-y: auto;
+    padding: 18px;
+}
+
+.chat-message {
+    max-width: 86%;
+    padding: 12px 14px;
+    border-radius: 18px 18px 18px 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.chat-message.mine {
+    align-self: flex-end;
+    border-radius: 18px 18px 6px 18px;
+    background: rgba(255,122,0,0.18);
+    border-color: rgba(255,122,0,0.24);
+}
+
+.chat-message-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 5px;
+    color: #aaa;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.chat-message-meta time {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.chat-message p {
+    margin: 0;
+    color: #f1f1f1;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.chat-empty {
+    margin: auto;
+    color: #aaa;
+    font-weight: 800;
+    text-align: center;
+}
+
+.chat-form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    padding: 14px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.18);
+}
+
+.chat-form input,
+.chat-form button {
+    margin-top: 0;
+}
+
+.chat-form button {
+    width: auto;
+    min-width: 86px;
+}
+
+/* =========================
+   NOTIFICATIONS
+========================= */
+
+.notifications-shell {
+    width: min(520px, calc(100% - 30px));
+    margin: 22px auto 110px;
+}
+
+.notifications-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin: 18px 0;
+    padding: 20px;
+    border-radius: 26px;
+    background:
+        radial-gradient(circle at top right, rgba(255,122,0,0.18), transparent 42%),
+        linear-gradient(145deg, #191919, #242424);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.34);
+}
+
+.notifications-header h1 {
+    margin: 5px 0 0;
+    color: white;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 30px;
+    font-weight: 900;
+    text-align: left;
+}
+
+.notification-page-bell {
+    width: 34px;
+    height: 34px;
+    transform: scale(1.15);
+}
+
+.notification-list {
+    display: grid;
+    gap: 12px;
+}
+
+.notification-card {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 20px;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035)),
+        #1c1c1c;
+    border: 1px solid rgba(255,255,255,0.07);
+}
+
+.notification-card h2 {
+    margin: 0 0 5px;
+    color: white;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    text-align: left;
+}
+
+.notification-card p {
+    margin: 0;
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.notification-card > span {
+    color: #ff7a00;
+    font-size: 12px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.notification-empty {
+    padding: 18px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+    text-align: center;
+    font-weight: 800;
 }
 
 /* =========================
@@ -385,6 +1035,12 @@ button {
     line-height: 1.6;
 }
 
+.user-link {
+    color: #ff9b42;
+    font-weight: 800;
+    text-decoration: none;
+}
+
 .match-footer {
     display: flex;
     justify-content: space-between;
@@ -416,6 +1072,8 @@ button {
     display: flex;
     align-items: center;
     gap: 8px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
 }
 
 .lineup-link {
@@ -430,6 +1088,91 @@ button {
     font-size: 14px;
     font-weight: 800;
     text-decoration: none;
+}
+
+.chat-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 13px;
+    border: 1px solid rgba(255,122,0,0.38);
+    border-radius: 14px;
+    background: rgba(255,122,0,0.13);
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.chat-link-active {
+    width: 48px;
+    min-width: 48px;
+    padding: 0;
+}
+
+.chat-link-locked {
+    width: auto;
+    margin-top: 0;
+    border-color: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.07);
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+.pixel-chat-icon {
+    position: relative;
+    display: inline-block;
+    width: 18px;
+    height: 15px;
+    border: 3px solid currentColor;
+    border-radius: 2px;
+    color: inherit;
+    image-rendering: pixelated;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.28);
+}
+
+.pixel-chat-icon::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    bottom: -8px;
+    width: 7px;
+    height: 7px;
+    background: currentColor;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.pixel-chat-icon::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border: 3px solid rgba(0,0,0,0.6);
+    transform: translate(-3px, -3px);
+    z-index: -1;
+}
+
+.match-actions .join-btn,
+.match-actions .lineup-link {
+    min-width: 128px;
+}
+
+.match-actions form {
+    margin: 0;
+}
+
+.match-actions form .join-btn {
+    margin-top: 0;
+}
+
+.feed-container > h2 {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    text-align: left;
+    color: #ff7a00;
+    margin: 22px 0 14px;
 }
 
 .logout-btn {
@@ -602,21 +1345,28 @@ button {
 .club-row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 18px;
 }
 
 .club-logo {
-    width: 48px;
-    height: 48px;
+    width: 78px;
+    height: 78px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex: 0 0 auto;
-    border-radius: 16px;
-    background: #ff7a00;
+    background: transparent;
     color: white;
     font-size: 24px;
     font-weight: 900;
+    border: 0;
+}
+
+.club-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.34));
 }
 
 .club-name,
@@ -630,6 +1380,113 @@ button {
     margin-top: 4px;
     color: #aaa;
     font-size: 13px;
+}
+
+.club-picker {
+    margin-top: 10px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+}
+
+.club-picker summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 0 12px;
+    color: #ddd;
+    font-size: 12px;
+    font-weight: 900;
+    cursor: pointer;
+    list-style: none;
+}
+
+.club-picker summary::-webkit-details-marker {
+    display: none;
+}
+
+.club-picker summary::after {
+    content: "+";
+    color: #ff7a00;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.club-picker[open] summary::after {
+    content: "-";
+}
+
+.club-picker summary strong {
+    color: #aaa;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.club-logo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-height: 260px;
+    margin: 0;
+    padding: 10px;
+    overflow-y: auto;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.club-logo-option {
+    position: relative;
+    display: grid;
+    place-items: center;
+    gap: 7px;
+    min-height: 96px;
+    padding: 10px 8px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+}
+
+.club-logo-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.club-logo-option img,
+.club-logo-empty {
+    width: 46px;
+    height: 46px;
+    object-fit: contain;
+}
+
+.club-logo-empty {
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    background: #ff7a00;
+    color: white;
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.club-logo-option strong {
+    color: #ddd;
+    font-size: 11px;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.club-logo-option input:checked + img,
+.club-logo-option input:checked + .club-logo-empty {
+    filter: drop-shadow(0 0 12px rgba(255,122,0,0.45));
+}
+
+.club-logo-option:has(input:checked) {
+    border-color: rgba(255,122,0,0.62);
+    background: rgba(255,255,255,0.055);
 }
 
 .activity-panel {
@@ -683,6 +1540,51 @@ button {
     .profile-grid {
         grid-template-columns: 1fr;
     }
+
+    .match-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .match-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+    }
+
+    .match-actions form,
+    .match-actions .join-btn,
+    .match-actions .lineup-link,
+    .match-actions .chat-link-locked {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .match-actions .join-btn,
+    .match-actions .lineup-link,
+    .match-actions .chat-link {
+        min-height: 48px;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 14px;
+    }
+
+    .match-actions .chat-link-locked {
+        grid-column: 1 / -1;
+    }
+
+    .match-actions .chat-link-active {
+        width: 48px;
+        padding: 0;
+    }
+
+    .chat-form {
+        grid-template-columns: 1fr;
+    }
+
+    .chat-form button {
+        width: 100%;
+    }
 }
 
 /* STATS */
@@ -714,8 +1616,10 @@ button {
     background: rgba(0,0,0,0.75);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     z-index: 9999;
+    overflow-y: auto;
+    padding: 20px 0;
 }
 
 .hidden {
@@ -728,6 +1632,8 @@ button {
     border-radius: 16px;
     width: 90%;
     max-width: 320px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
     text-align: center;
 }
 
@@ -860,6 +1766,13 @@ button {
 
 .stats-header {
     text-align: center;
+}
+
+.stats-header h1,
+.stats-page h2,
+.stats-page h3 {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 800;
 }
 
 .stats-level-card {
@@ -1149,6 +2062,22 @@ button {
     object-fit: cover;
 }
 
+.slot-shirt.has-avatar {
+    width: 64px;
+    height: 64px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.slot-shirt.has-avatar img {
+    border-radius: 50%;
+    object-fit: contain;
+    filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.24));
+}
+
 .slot-label {
     margin-top: 5px;
     color: #101010;
@@ -1216,18 +2145,6 @@ button {
 }
 
 @media (max-width: 760px) {
-    .match-footer,
-    .match-actions {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .match-actions,
-    .match-actions form,
-    .lineup-link {
-        width: 100%;
-    }
-
     .lineup-header {
         align-items: flex-start;
         flex-direction: column;
@@ -1264,6 +2181,11 @@ button {
     .slot-shirt {
         width: 42px;
         height: 42px;
+    }
+
+    .slot-shirt.has-avatar {
+        width: 58px;
+        height: 58px;
     }
 
     .slot-label {

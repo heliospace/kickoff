@@ -9,9 +9,19 @@
 
 <body>
 
-    <div class="logo-container">
+    <header class="home-topbar">
+        <div></div>
+
         <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo" alt="Kickoff Logo">
-    </div>
+
+        <a href="/notifications" class="notification-bell" aria-label="Notifications">
+            <img
+                src="{{ url_for('static', filename='images/bell-alert.svg') }}"
+                class="bell-icon-img"
+                alt="">
+            <span class="notification-dot" aria-hidden="true"></span>
+        </a>
+    </header>
 
     {% include "_flash.html" %}
 

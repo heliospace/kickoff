@@ -57,7 +57,13 @@
 
                 <div class="club-row">
                     <div class="club-logo">
-                        {{ (user.favorite_club[:1] if user.favorite_club else "K")|upper }}
+                        {% if user.club_logo %}
+                            <img
+                                src="{{ url_for('static', filename='logos/' + user.club_logo) }}"
+                                alt="{{ user.favorite_club }}">
+                        {% else %}
+                            {{ (user.favorite_club[:1] if user.favorite_club else "K")|upper }}
+                        {% endif %}
                     </div>
 
                     <div>
@@ -191,13 +197,40 @@
                     placeholder="e.g. Mumbai, Bandra"
                 >
 
-                <label class="input-label">Favorite Club</label>
-                <input
-                    type="text"
-                    name="favorite_club"
-                    value="{{ user.favorite_club or '' }}"
-                    placeholder="e.g. Barcelona"
-                >
+                <details class="club-picker">
+                    <summary>
+                        <span>Club Badge</span>
+                        <strong>{{ user.favorite_club or "Choose badge" }}</strong>
+                    </summary>
+
+                    <div class="club-logo-grid">
+                        <label class="club-logo-option">
+                            <input
+                                type="radio"
+                                name="club_logo"
+                                value=""
+                                {% if not user.club_logo %}checked{% endif %}
+                            >
+                            <span class="club-logo-empty">K</span>
+                            <strong>None</strong>
+                        </label>
+
+                        {% for club in club_options %}
+                            <label class="club-logo-option">
+                                <input
+                                    type="radio"
+                                    name="club_logo"
+                                    value="{{ club.logo }}"
+                                    {% if user.club_logo == club.logo %}checked{% endif %}
+                                >
+                                <img
+                                    src="{{ url_for('static', filename='logos/' + club.logo) }}"
+                                    alt="{{ club.name }}">
+                                <strong>{{ club.name }}</strong>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </details>
 
                 <label class="input-label">Supporter Label</label>
                 <input
@@ -239,30 +272,17 @@
 
                 <div class="avatar-grid">
 
-                    <label>
-                        <input type="radio" name="avatar" value="barca.png">
-                        <img src="{{ url_for('static', filename='avatars/barca.png') }}">
-                    </label>
-
-                    <label>
-                        <input type="radio" name="avatar" value="realmadrid.png">
-                        <img src="{{ url_for('static', filename='avatars/realmadrid.png') }}">
-                    </label>
-
-                    <label>
-                        <input type="radio" name="avatar" value="juventus.png">
-                        <img src="{{ url_for('static', filename='avatars/juventus.png') }}">
-                    </label>
-
-                    <label>
-                        <input type="radio" name="avatar" value="italy.png">
-                        <img src="{{ url_for('static', filename='avatars/italy.png') }}">
-                    </label>
-
-                    <label>
-                        <input type="radio" name="avatar" value="portugal.png">
-                        <img src="{{ url_for('static', filename='avatars/portugal.png') }}">
-                    </label>
+                    {% for avatar in avatar_options %}
+                        <label>
+                            <input
+                                type="radio"
+                                name="avatar"
+                                value="{{ avatar }}"
+                                {% if user.avatar == avatar %}checked{% endif %}
+                            >
+                            <img src="{{ url_for('static', filename='avatars/' + avatar) }}" alt="Avatar option">
+                        </label>
+                    {% endfor %}
 
                 </div>
 

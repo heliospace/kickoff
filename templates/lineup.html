@@ -63,7 +63,7 @@
 
                         <div class="lineup-slot"
                              style="left: {{ slot.x }}%; top: {{ slot.y }}%;">
-                            <div class="slot-shirt">
+                            <div class="slot-shirt {% if ns.player %}has-avatar{% endif %}">
                                 {% if ns.player %}
                                     <img src="{{ url_for('static', filename='avatars/' + ns.player.avatar) }}"
                                          alt="{{ ns.player.username }}">

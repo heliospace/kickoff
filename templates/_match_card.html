@@ -32,9 +32,13 @@
 
     <div class="match-info">
         Joined:
-        {% set names = participant_names.get(match.id, []) %}
-        {% if names %}
-            {{ names|join(", ") }}
+        {% set users = participant_users.get(match.id, []) %}
+        {% if users %}
+            {% for joined_user in users %}
+                <a href="/user/{{ joined_user.username }}" class="user-link">
+                    {{ joined_user.username }}
+                </a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
         {% else %}
             No players yet
         {% endif %}
@@ -46,6 +50,19 @@
         </span>
 
         <div class="match-actions">
+            {% set can_chat = match.user_id == current_user.id or match.id in joined_match_ids %}
+
+            {% if can_chat %}
+                <a href="/match/{{ match.id }}/chat" class="chat-link chat-link-active" aria-label="Open match chat">
+                    <span class="pixel-chat-icon" aria-hidden="true"></span>
+                </a>
+            {% else %}
+                <button class="chat-link chat-link-locked" disabled>
+                    <span class="pixel-chat-icon" aria-hidden="true"></span>
+                    <span>Join match to play and chat</span>
+                </button>
+            {% endif %}
+
             <a href="/match/{{ match.id }}/lineup" class="lineup-link">
                 View Lineup
             </a>

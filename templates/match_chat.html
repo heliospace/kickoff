@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Chat - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}"
+             class="logo"
+             alt="Kickoff Logo">
+    </div>
+
+    {% include "_flash.html" %}
+
+    <main class="chat-shell">
+        <a href="/matches" class="back-link">
+            Back to matches
+        </a>
+
+        <section class="chat-room">
+            <div class="chat-header">
+                <div>
+                    <span class="chat-kicker">Match chat</span>
+                    <h1>Football Match</h1>
+                    <p>{{ match.display_time }} &middot; {{ match.location }}</p>
+                </div>
+
+                <span class="pixel-chat-icon chat-header-icon" aria-hidden="true"></span>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                {% if messages %}
+                    {% for message in messages %}
+                        <article class="chat-message {% if message.user_id == current_user.id %}mine{% endif %}">
+                            <div class="chat-message-meta">
+                                <span>{{ message.user.username }}</span>
+                                <time>{{ message.created_at.strftime("%I:%M %p") }}</time>
+                            </div>
+                            <p>{{ message.body }}</p>
+                        </article>
+                    {% endfor %}
+                {% else %}
+                    <div class="chat-empty">
+                        No messages yet. Start the match talk.
+                    </div>
+                {% endif %}
+            </div>
+
+            <form method="POST" class="chat-form">
+                <input
+                    type="text"
+                    name="body"
+                    maxlength="500"
+                    placeholder="Write a message"
+                    autocomplete="off"
+                    required
+                >
+
+                <button type="submit">
+                    Send
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <div class="bottom-nav">
+        <a href="/">Home</a>
+        <a href="/matches">Feed</a>
+        <a href="/stats">Stats</a>
+        <a href="/profile">Profile</a>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById("chatMessages");
+
+        if (chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+
+</body>
+</html>

@@ -7,22 +7,31 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
-<body>
+<body class="create-choice-page">
 
-    <h1>Create</h1>
+    <div class="create-choice-bg" aria-hidden="true"></div>
 
-    <div class="logo-container">
+    <header class="create-choice-header">
+        <a href="/" class="back-link">
+            Back
+        </a>
+
         <img src="{{ url_for('static', filename='images/logo.png') }}"
              class="logo"
              alt="Kickoff Logo">
-    </div>
+    </header>
 
     {% include "_flash.html" %}
 
-    <div class="feed-container">
+    <main class="create-choice-shell">
+        <section class="create-choice-hero">
+            <span class="chat-kicker">Kickoff create</span>
+            <h1>Create</h1>
+            <p>Start a match or build a watch party.</p>
+        </section>
 
         <!-- CREATE MATCH -->
-        <div class="match-card">
+        <div class="match-card create-choice-card">
 
             <div class="match-top">
 
@@ -63,7 +72,7 @@
         </div>
 
         <!-- CREATE SCREENING -->
-        <div class="match-card">
+        <div class="match-card create-choice-card screening-choice-card">
 
             <div class="match-top">
 
@@ -103,7 +112,7 @@
 
         </div>
 
-    </div>
+    </main>
 
     <div class="bottom-nav">
         <a href="/">Home</a>

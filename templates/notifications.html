@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <main class="notifications-shell">
+        <a href="/" class="back-link">
+            Back home
+        </a>
+
+        <section class="notifications-header">
+            <div>
+                <span class="chat-kicker">Kickoff</span>
+                <h1>Notifications</h1>
+            </div>
+
+            <img
+                src="{{ url_for('static', filename='images/bell-alert.svg') }}"
+                class="bell-icon-img notification-page-bell"
+                alt="">
+        </section>
+
+        <div class="notification-list">
+            {% for item in notifications %}
+                <article class="notification-card notification-{{ item.kind }}">
+                    <div>
+                        <h2>{{ item.title }}</h2>
+                        <p>{{ item.body }}</p>
+                    </div>
+
+                    <span>{{ item.time }}</span>
+                </article>
+            {% else %}
+                <div class="notification-empty">
+                    No notifications yet.
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <div class="bottom-nav">
+        <a href="/">Home</a>
+        <a href="/matches">Feed</a>
+        <a href="/stats">Stats</a>
+        <a href="/profile">Profile</a>
+    </div>
+
+</body>
+</html>

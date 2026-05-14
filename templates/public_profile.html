@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile_user.username }} - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    {% include "_flash.html" %}
+
+    <div class="public-profile-shell">
+        <a href="/matches" class="lineup-back">Back</a>
+
+        <div class="public-profile-card">
+            <div class="public-glow"></div>
+
+            <div class="public-avatar-wrap">
+                <img
+                    src="{{ url_for('static', filename='avatars/' + profile_user.avatar) }}"
+                    class="public-avatar"
+                    alt="{{ profile_user.username }}">
+            </div>
+
+            <h1>{{ profile_user.name or profile_user.username }}</h1>
+            <div class="profile-username">@{{ profile_user.username }}</div>
+
+            <div class="public-meta">
+                <span>{{ profile_user.position or "Player" }}</span>
+                <span>{{ profile_user.location or "Location not set" }}</span>
+            </div>
+
+            <div class="public-club-card">
+                <div class="club-logo">
+                    {% if profile_user.club_logo %}
+                        <img
+                            src="{{ url_for('static', filename='logos/' + profile_user.club_logo) }}"
+                            alt="{{ profile_user.favorite_club }}">
+                    {% else %}
+                        {{ (profile_user.favorite_club[:1] if profile_user.favorite_club else "K")|upper }}
+                    {% endif %}
+                </div>
+                <div>
+                    <div class="club-name">
+                        {{ profile_user.favorite_club or "No club selected" }}
+                    </div>
+                    <div class="club-label">
+                        {{ profile_user.fan_label or "Supporter title not set" }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="public-level">
+                <div>
+                    <div class="profile-card-kicker">Level</div>
+                    <strong>{{ level }}</strong>
+                </div>
+                <div>
+                    <div class="profile-card-kicker">XP</div>
+                    <strong>{{ xp }}</strong>
+                </div>
+            </div>
+
+            <div class="public-stat-grid">
+                <div>
+                    <strong>{{ matches_created }}</strong>
+                    <span>Hosted</span>
+                </div>
+                <div>
+                    <strong>{{ matches_joined }}</strong>
+                    <span>Joined</span>
+                </div>
+                <div>
+                    <strong>{{ screenings_hosted }}</strong>
+                    <span>Parties</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
