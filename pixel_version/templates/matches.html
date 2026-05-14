@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matches - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}"
+             class="logo"
+             alt="Kickoff Logo">
+    </div>
+
+    <!-- FEED -->
+    <div class="feed-container">
+
+        {% for match in matches %}
+
+        <!-- MATCH CARD -->
+        <div class="match-card active-match">
+
+            <!-- TOP -->
+            <div class="match-top">
+
+                <div>
+                    <div class="match-title">
+                        Football Match
+                    </div>
+
+                    <div class="match-time">
+                        ⏰ {{ match.time }}
+                    </div>
+                </div>
+
+                <span class="match-status fulltime">
+                    FULL TIME
+                </span>
+
+            </div>
+
+            <!-- LOCATION -->
+            <div class="match-info">
+                📍 {{ match.location }}
+            </div>
+
+            <!-- PLAYERS -->
+            <div class="match-info">
+                👥 {{ match.joined }}/{{ match.players }} players
+            </div>
+
+            <!-- JOINED USERS -->
+            <div class="match-info">
+                Joined:
+
+                {% for p in participants %}
+                    {% if p.match_id == match.id %}
+
+                        {% for u in users %}
+                            {% if u.id == p.user_id %}
+
+                                {{ u.username }}{% if not loop.last %}, {% endif %}
+
+                            {% endif %}
+                        {% endfor %}
+
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- BUTTON -->
+            <div class="match-footer">
+
+                {% if match.joined < match.players %}
+
+                <form action="/join/{{ match.id }}" method="POST">
+                    <button class="join-btn">
+                        Join Match
+                    </button>
+                </form>
+
+                {% else %}
+
+                <button class="join-btn full" disabled>
+                    Full
+                </button>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- FLOATING BUTTON -->
+    <a href="/create" class="fab">
+        +
+    </a>
+
+    <!-- NAV -->
+    <div class="bottom-nav">
+        <a href="/">Home</a>
+        <a href="/matches">Feed</a>
+        <a href="/stats">Stats</a>
+        <a href="/profile">Profile</a>
+    </div>
+
+</body>
+</html>

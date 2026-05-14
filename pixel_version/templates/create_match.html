@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Match - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <!-- LOGO -->
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}"
+             class="logo"
+             alt="Kickoff Logo">
+    </div>
+
+    <!-- HEADER -->
+    <div class="matches-header">
+        <h2>Create Match</h2>
+        <p>Start a football game nearby</p>
+    </div>
+
+    <!-- CREATE FORM -->
+    <div class="create-container">
+
+        <form action="/create_match" method="post">
+
+            <!-- MATCH TYPE -->
+            <label class="input-label">Match Type</label>
+
+            <select name="match_type" required>
+                <option value="Regular Football">
+                    Regular Football
+                </option>
+
+                <option value="E-Football">
+                    E-Football
+                </option>
+            </select>
+
+            <!-- LOCATION -->
+            <label class="input-label">Location</label>
+
+            <input
+                type="text"
+                name="location"
+                placeholder="Enter turf, café or online room"
+                required
+            >
+
+            <!-- DATE & TIME -->
+            <label class="input-label">Date & Time</label>
+
+            <input
+                type="datetime-local"
+                name="time"
+                required
+            >
+
+            <!-- PLAYERS -->
+            <label class="input-label">Max Players</label>
+
+            <input
+                type="number"
+                name="players"
+                placeholder="10"
+                required
+            >
+
+            <!-- BUTTON -->
+            <button type="submit" class="create-btn">
+                Create Match
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <a href="/">Home</a>
+        <a href="/matches">Matches</a>
+        <a href="/stats">Stats</a>
+        <a href="/profile">Profile</a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kickoff Pixel Game Sample</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --grass: #123f24;
+            --grass-dark: #0a2618;
+            --lime: #71ff5a;
+            --cream: #fff4c7;
+            --gold: #ffcc33;
+            --orange: #ff7a00;
+            --red: #f9423a;
+            --blue: #29a9ff;
+            --ink: #090909;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                radial-gradient(circle at 50% 0%, #1b743a, var(--grass-dark) 58%);
+            background-size: 18px 18px, 18px 18px, 100% 100%;
+            color: var(--cream);
+            font-family: "VT323", monospace;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255,255,255,0.06),
+                rgba(255,255,255,0.06) 1px,
+                transparent 1px,
+                transparent 5px
+            );
+            mix-blend-mode: soft-light;
+            opacity: 0.38;
+            z-index: 10;
+        }
+
+        .page {
+            width: min(1120px, calc(100% - 28px));
+            margin: 0 auto;
+            padding: 20px 0 42px;
+        }
+
+        .topbar,
+        .scoreboard,
+        .quest-card,
+        .stat-panel,
+        .power-button,
+        .bottom-nav {
+            border: 4px solid var(--ink);
+            box-shadow: 6px 6px 0 var(--ink);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            background: #1a1a1a;
+            padding: 14px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge {
+            width: 34px;
+            height: 34px;
+            background:
+                linear-gradient(90deg, transparent 38%, var(--ink) 38%, var(--ink) 48%, transparent 48%),
+                linear-gradient(transparent 38%, var(--ink) 38%, var(--ink) 48%, transparent 48%),
+                var(--cream);
+            border: 3px solid var(--ink);
+            image-rendering: pixelated;
+            animation: bounce 1.2s steps(2) infinite;
+        }
+
+        .brand-title {
+            font-family: "Press Start 2P", monospace;
+            color: var(--gold);
+            font-size: 18px;
+            line-height: 1.3;
+            text-shadow: 3px 3px 0 #8a2a00;
+        }
+
+        .coins {
+            color: var(--lime);
+            font-family: "Press Start 2P", monospace;
+            font-size: 12px;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 18px;
+            margin-top: 20px;
+            align-items: stretch;
+        }
+
+        .scoreboard {
+            min-height: 450px;
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(90deg, rgba(255,255,255,0.08) 2px, transparent 2px),
+                linear-gradient(#1f8d43, #13642e);
+            background-size: 54px 54px, 100% 100%;
+        }
+
+        .field-line {
+            position: absolute;
+            inset: 34px;
+            border: 5px solid rgba(255,244,199,0.82);
+        }
+
+        .midline {
+            position: absolute;
+            top: 34px;
+            bottom: 34px;
+            left: 50%;
+            width: 5px;
+            background: rgba(255,244,199,0.82);
+        }
+
+        .circle {
+            position: absolute;
+            width: 126px;
+            height: 126px;
+            border: 5px solid rgba(255,244,199,0.82);
+            left: calc(50% - 63px);
+            top: calc(50% - 63px);
+            border-radius: 50%;
+        }
+
+        .goal {
+            position: absolute;
+            top: calc(50% - 64px);
+            width: 34px;
+            height: 128px;
+            border: 5px solid rgba(255,244,199,0.82);
+        }
+
+        .goal.left {
+            left: 34px;
+            border-left: 0;
+        }
+
+        .goal.right {
+            right: 34px;
+            border-right: 0;
+        }
+
+        .score-strip {
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            background: var(--ink);
+            border: 4px solid var(--cream);
+            padding: 10px 14px;
+            color: var(--gold);
+            font-family: "Press Start 2P", monospace;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .player {
+            position: absolute;
+            width: 30px;
+            height: 42px;
+            background: var(--blue);
+            border: 4px solid var(--ink);
+            box-shadow: 0 12px 0 #0f5e95;
+            image-rendering: pixelated;
+            animation: playerSteps 0.7s steps(2) infinite;
+        }
+
+        .player::before {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 14px;
+            left: 2px;
+            top: -18px;
+            background: #ffd7a8;
+            border: 4px solid var(--ink);
+        }
+
+        .player.red {
+            background: var(--red);
+            box-shadow: 0 12px 0 #98231f;
+        }
+
+        .p1 { left: 19%; top: 34%; }
+        .p2 { left: 31%; top: 62%; animation-delay: 0.2s; }
+        .p3 { right: 25%; top: 40%; animation-delay: 0.1s; }
+        .p4 { right: 16%; top: 66%; animation-delay: 0.3s; }
+
+        .ball {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            left: 48%;
+            top: 56%;
+            background: var(--cream);
+            border: 4px solid var(--ink);
+            border-radius: 50%;
+            z-index: 3;
+            animation: ballRun 4s steps(12) infinite;
+        }
+
+        .ball::after {
+            content: "";
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            left: 4px;
+            top: 4px;
+            background: var(--ink);
+        }
+
+        .side-panel {
+            display: grid;
+            gap: 14px;
+        }
+
+        .quest-card,
+        .stat-panel {
+            background: #171717;
+            padding: 18px;
+        }
+
+        .kicker {
+            color: var(--lime);
+            font-family: "Press Start 2P", monospace;
+            font-size: 11px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            margin: 0;
+            font-family: "Press Start 2P", monospace;
+            font-size: clamp(28px, 5vw, 52px);
+            line-height: 1.3;
+            color: var(--gold);
+            text-shadow: 5px 5px 0 #8a2a00;
+        }
+
+        .copy {
+            margin: 14px 0 0;
+            font-size: 28px;
+            line-height: 1.15;
+            color: var(--cream);
+        }
+
+        .power-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 54px;
+            margin-top: 18px;
+            padding: 0 18px;
+            background: var(--orange);
+            color: white;
+            text-decoration: none;
+            font-family: "Press Start 2P", monospace;
+            font-size: 12px;
+            transition: transform 0.15s steps(2), box-shadow 0.15s steps(2);
+        }
+
+        .power-button:hover {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0 var(--ink);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 12px 0;
+            font-size: 24px;
+        }
+
+        .bar {
+            flex: 1;
+            height: 16px;
+            background: var(--ink);
+            border: 3px solid var(--cream);
+        }
+
+        .fill {
+            height: 100%;
+            background: var(--lime);
+            animation: charge 1.6s steps(8) infinite alternate;
+        }
+
+        .quests {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 18px;
+        }
+
+        .mini-card {
+            min-height: 170px;
+            background: #161616;
+            border: 4px solid var(--ink);
+            box-shadow: 5px 5px 0 var(--ink);
+            padding: 16px;
+            transition: transform 0.15s steps(2), background 0.15s steps(2);
+        }
+
+        .mini-card:hover {
+            transform: translateY(-5px);
+            background: #242424;
+        }
+
+        .mini-card h2 {
+            margin: 0 0 12px;
+            color: var(--gold);
+            font-family: "Press Start 2P", monospace;
+            font-size: 14px;
+            line-height: 1.45;
+        }
+
+        .mini-card p {
+            margin: 0;
+            color: var(--cream);
+            font-size: 24px;
+            line-height: 1.15;
+        }
+
+        .bottom-nav {
+            position: sticky;
+            bottom: 16px;
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            margin: 20px auto 0;
+            padding: 12px;
+            background: #171717;
+        }
+
+        .bottom-nav a {
+            color: var(--cream);
+            text-decoration: none;
+            font-family: "Press Start 2P", monospace;
+            font-size: 10px;
+        }
+
+        .fab {
+            position: fixed;
+            right: 22px;
+            bottom: 88px;
+            width: 70px;
+            height: 70px;
+            display: grid;
+            place-items: center;
+            background: var(--gold);
+            color: var(--ink);
+            border: 4px solid var(--ink);
+            box-shadow: 6px 6px 0 var(--ink);
+            font-family: "Press Start 2P", monospace;
+            font-size: 26px;
+            text-decoration: none;
+            animation: pulse 1s steps(2) infinite;
+        }
+
+        @keyframes ballRun {
+            0% { transform: translate(-150px, -60px); }
+            25% { transform: translate(-40px, 34px); }
+            50% { transform: translate(95px, -22px); }
+            75% { transform: translate(30px, 74px); }
+            100% { transform: translate(-150px, -60px); }
+        }
+
+        @keyframes playerSteps {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        @keyframes charge {
+            from { width: 48%; }
+            to { width: 94%; }
+        }
+
+        @media (max-width: 860px) {
+            .hero,
+            .quests {
+                grid-template-columns: 1fr;
+            }
+
+            .scoreboard {
+                min-height: 360px;
+            }
+
+            .brand-title {
+                font-size: 14px;
+            }
+
+            .coins {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <nav class="topbar">
+            <div class="brand">
+                <div class="badge"></div>
+                <div class="brand-title">KICKOFF</div>
+            </div>
+            <div class="coins">XP 2400 / LVL 07</div>
+        </nav>
+
+        <section class="hero">
+            <div class="scoreboard" aria-label="Animated pixel football pitch">
+                <div class="score-strip">P1 02 : 01 CPU / 72'</div>
+                <div class="field-line"></div>
+                <div class="midline"></div>
+                <div class="circle"></div>
+                <div class="goal left"></div>
+                <div class="goal right"></div>
+                <div class="player p1"></div>
+                <div class="player p2"></div>
+                <div class="player red p3"></div>
+                <div class="player red p4"></div>
+                <div class="ball"></div>
+            </div>
+
+            <aside class="side-panel">
+                <div class="quest-card">
+                    <div class="kicker">NEW QUEST</div>
+                    <h1>Turf Run</h1>
+                    <p class="copy">Find players nearby, join a squad, and build your match streak.</p>
+                    <a href="#" class="power-button">CREATE MATCH</a>
+                </div>
+
+                <div class="stat-panel">
+                    <div class="kicker">PLAYER CARD</div>
+                    <div class="stat"><span>PAC</span><div class="bar"><div class="fill"></div></div><span>88</span></div>
+                    <div class="stat"><span>PAS</span><div class="bar"><div class="fill"></div></div><span>81</span></div>
+                    <div class="stat"><span>PHY</span><div class="bar"><div class="fill"></div></div><span>79</span></div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="quests">
+            <article class="mini-card">
+                <h2>JOIN LOBBY</h2>
+                <p>3 matches open near you. Claim a spot before kickoff.</p>
+            </article>
+
+            <article class="mini-card">
+                <h2>WATCH PARTY</h2>
+                <p>Host a screening and invite fans for derby night.</p>
+            </article>
+
+            <article class="mini-card">
+                <h2>DAILY XP</h2>
+                <p>Complete one match today to unlock streak bonus.</p>
+            </article>
+        </section>
+
+        <nav class="bottom-nav">
+            <a href="#">HOME</a>
+            <a href="#">FEED</a>
+            <a href="#">STATS</a>
+            <a href="#">PROFILE</a>
+        </nav>
+    </main>
+
+    <a href="#" class="fab">+</a>
+</body>
+</html>

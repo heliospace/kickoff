@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Screening - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <!-- LOGO -->
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}"
+             class="logo"
+             alt="Kickoff Logo">
+    </div>
+
+    {% include "_flash.html" %}
+
+    <!-- HEADER -->
+    <div class="matches-header">
+        <h2>Create Screening</h2>
+        <p>Host a football screening nearby</p>
+    </div>
+
+    <!-- FORM -->
+    <div class="create-container">
+
+        <form action="/create_screening" method="post">
+
+            <!-- MATCH -->
+            <label class="input-label">Match</label>
+
+            <input
+                type="text"
+                name="screening_match"
+                placeholder="e.g. Arsenal vs Chelsea"
+                required
+            >
+
+            <!-- DATE & TIME -->
+            <label class="input-label">Date & Time</label>
+
+            <input
+                type="datetime-local"
+                name="time"
+                required
+            >
+
+            <!-- LOCATION -->
+            <label class="input-label">Location</label>
+
+            <input
+                type="text"
+                name="location"
+                placeholder="Cafe, turf, rooftop..."
+                required
+            >
+
+            <!-- MAX SEATS -->
+            <label class="input-label">Max Seats</label>
+
+            <input
+                type="number"
+                name="seats"
+                min="1"
+                placeholder="50"
+                required
+            >
+
+            <!-- ENTRY TYPE -->
+            <label class="input-label">Entry Type</label>
+
+            <input
+                type="text"
+                name="entry"
+                placeholder="Free or Paid"
+            >
+
+            <!-- PRICE -->
+            <label class="input-label">Price</label>
+
+            <input
+                type="text"
+                name="price"
+                placeholder="Rs 200"
+            >
+
+            <!-- BOOKING LINK -->
+            <label class="input-label">Booking Link</label>
+
+            <input
+                type="url"
+                name="booking_link"
+                placeholder="District / Insider / Google Form"
+            >
+
+            <!-- BUTTON -->
+            <button type="submit">
+                Create Screening
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- NAV -->
+    <div class="bottom-nav">
+        <a href="/">Home</a>
+        <a href="/matches">Feed</a>
+        <a href="/stats">Stats</a>
+        <a href="/profile">Profile</a>
+    </div>
+
+</body>
+</html>

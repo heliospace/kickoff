@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Stats - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+    <div class="stats-header">
+        <h1>Your Stats</h1>
+        <p class="muted">{{ user.username if user else "Player" }} • Performance Overview</p>
+    </div>
+
+    <!-- =========================
+         ACTIVITY GRAPH
+    ========================== -->
+    <div class="graph-card">
+        <canvas id="matchesChart"></canvas>
+    </div>
+
+    <!-- =========================
+         FIFA STYLE PLAYER CARD
+    ========================== -->
+    <div class="fifa-card">
+
+        <div class="fifa-top">
+            <div class="overall-rating">
+                {{ (user_matches * 10) + 50 }}
+            </div>
+
+            <div class="fifa-title">
+                PLAYER RATING
+            </div>
+        </div>
+
+        <div class="fifa-stats">
+
+            <div class="fifa-row"><span>PAC</span><span>88</span></div>
+            <div class="fifa-row"><span>SHO</span><span>74</span></div>
+            <div class="fifa-row"><span>PAS</span><span>81</span></div>
+            <div class="fifa-row"><span>DEF</span><span>60</span></div>
+            <div class="fifa-row"><span>PHY</span><span>79</span></div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         WIN / LOSS CARD
+    ========================== -->
+    <div class="profile-card">
+
+        <h3 style="margin-bottom: 10px;">Match Performance</h3>
+
+        <div class="stat-row">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Wins</div>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Losses</div>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-number">--</div>
+            <div class="stat-label">Win Rate</div>
+        </div>
+
+    </div>
+
+    <!-- =========================
+         QUICK STATS GRID
+    ========================== -->
+    <div class="stats-grid">
+
+        <div class="stats-card">
+            <div class="big-stat">{{ total_matches }}</div>
+            <div class="stat-text">Total Matches</div>
+        </div>
+
+        <div class="stats-card">
+            <div class="big-stat">{{ user_matches }}</div>
+            <div class="stat-text">Your Matches</div>
+        </div>
+
+        <div class="stats-card">
+            <div class="big-stat">0</div>
+            <div class="stat-text">Goals</div>
+        </div>
+
+        <div class="stats-card">
+            <div class="big-stat">--</div>
+            <div class="stat-text">Win Rate</div>
+        </div>
+
+    </div>
+
+    <!-- =========================
+         BOTTOM NAV
+    ========================== -->
+    <div class="bottom-nav">
+        <a href="/">Home</a>
+        <a href="/matches">Matches</a>
+        <a href="/stats">Stats</a>
+        <a href="/profile">Profile</a>
+    </div>
+
+    <!-- =========================
+         CHART
+    ========================== -->
+    <script>
+        const ctx = document.getElementById('matchesChart');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                datasets: [{
+                    label: 'Matches',
+                    data: [0, 1, 1, 2, 3, {{ user_matches or 0 }}],
+                    borderColor: '#ff7a00',
+                    backgroundColor: 'rgba(255,122,0,0.15)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: { color: 'white' }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#aaa' }
+                    },
+                    y: {
+                        ticks: { color: '#aaa' }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

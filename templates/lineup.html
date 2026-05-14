@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lineup - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <div class="lineup-page">
+
+        {% include "_flash.html" %}
+
+        <div class="lineup-header">
+            <a href="/matches" class="lineup-back">Back</a>
+            <div>
+                <h1>Match Lineup</h1>
+                <p>{{ match.location }} / {{ match.display_time }}</p>
+            </div>
+            <span class="match-status">PIXEL XI</span>
+        </div>
+
+        <form method="POST" action="/match/{{ match.id }}/lineup">
+
+            <div class="lineup-board">
+                <div class="lineup-meta left">
+                    <span>Host</span>
+                    <strong>{{ match.creator.username if match.creator else "Host" }}</strong>
+                    <span>Formation</span>
+                    <strong>{{ formation }}</strong>
+                </div>
+
+                <div class="lineup-meta right">
+                    <span>Kickoff</span>
+                    <strong>{{ match.display_time }}</strong>
+                    <span>Edit</span>
+                    <strong>
+                        {% if can_edit %}
+                            Unlocked
+                        {% elif unlock_time %}
+                            {{ unlock_time }}
+                        {% else %}
+                            Locked
+                        {% endif %}
+                    </strong>
+                </div>
+
+                <div class="pixel-pitch">
+                    <div class="pitch-box"></div>
+                    <div class="pitch-half"></div>
+                    <div class="pitch-circle"></div>
+
+                    {% for slot in lineup_slots %}
+                        {% set assigned_id = assignments.get(slot.key) %}
+                        {% set ns = namespace(player=none) %}
+                        {% for player in lineup_players %}
+                            {% if player.id == assigned_id %}
+                                {% set ns.player = player %}
+                            {% endif %}
+                        {% endfor %}
+
+                        <div class="lineup-slot"
+                             style="left: {{ slot.x }}%; top: {{ slot.y }}%;">
+                            <div class="slot-shirt">
+                                {% if ns.player %}
+                                    <img src="{{ url_for('static', filename='avatars/' + ns.player.avatar) }}"
+                                         alt="{{ ns.player.username }}">
+                                {% else %}
+                                    <span>{{ slot.label }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="slot-label">
+                                {{ ns.player.username if ns.player else slot.label }}
+                            </div>
+
+                            {% if can_edit %}
+                                <select name="slot_{{ slot.key }}" class="slot-select">
+                                    <option value="">Empty</option>
+                                    {% for player in lineup_players %}
+                                        <option value="{{ player.id }}" {% if assigned_id == player.id %}selected{% endif %}>
+                                            {{ player.username }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="lineup-dock">
+                <div>
+                    <div class="profile-card-kicker">Players</div>
+                    <div class="lineup-player-strip">
+                        {% for player in lineup_players %}
+                            <div class="lineup-player-chip">
+                                <img src="{{ url_for('static', filename='avatars/' + player.avatar) }}"
+                                     alt="{{ player.username }}">
+                                <span>{{ player.username }}</span>
+                            </div>
+                        {% else %}
+                            <span class="muted">No players joined yet</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% if is_host %}
+                    <div class="host-controls">
+                        {% if can_edit %}
+                            <label class="input-label">Formation</label>
+                            <select name="formation">
+                                {% for option in formations.keys() %}
+                                    <option value="{{ option }}" {% if option == formation %}selected{% endif %}>
+                                        {{ option }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            <button type="submit">
+                                Save Lineup
+                            </button>
+                        {% else %}
+                            <div class="locked-note">
+                                Lineup editing unlocks 15 minutes before kickoff.
+                            </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="locked-note">
+                        Only the host can edit this lineup.
+                    </div>
+                {% endif %}
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

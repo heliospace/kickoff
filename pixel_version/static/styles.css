@@ -1,0 +1,692 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap");
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #111111;
+    color: white;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* =========================
+   TYPOGRAPHY
+========================= */
+
+h1, h2, h3 {
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    color: #ff7a00;
+    text-align: center;
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.logo {
+    width: 120px;
+}
+
+/* =========================
+   INPUTS / BUTTONS
+========================= */
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 12px;
+    background-color: #2a2a2a;
+    color: white;
+    box-sizing: border-box;
+    font-family: "DM Sans", sans-serif;
+}
+
+input:focus {
+    outline: none;
+    border: 1px solid #ff7a00;
+}
+
+.container {
+    width: min(420px, calc(100% - 30px));
+    margin: 30px auto 0;
+}
+
+.auth-link {
+    color: #aaa;
+    font-size: 14px;
+    text-align: center;
+}
+
+.auth-link a {
+    color: #ff7a00;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 12px;
+    background-color: #ff7a00;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    cursor: pointer;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 0;
+    z-index: 1000;
+}
+
+.bottom-nav a {
+    color: #ff7a00;
+    text-decoration: none;
+    font-weight: 600;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* =========================
+   FLOATING BUTTON
+========================= */
+
+.fab {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #ff7a00;
+    color: white;
+    font-family: "Helvetica Neue", "SF Pro Display", Arial, sans-serif;
+    font-size: 42px;
+    font-weight: 200;
+    text-align: center;
+    line-height: 54px;
+    border-radius: 50%;
+    text-decoration: none;
+    letter-spacing: 0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* =========================
+   MATCH CARDS
+========================= */
+
+.feed-container {
+    padding: 15px;
+    padding-bottom: 120px;
+}
+
+.match-card {
+    background: linear-gradient(145deg, #1a1a1a, #2b2b2b);
+    border-radius: 22px;
+    padding: 18px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+
+.match-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.match-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.match-time {
+    font-size: 13px;
+    color: #9a9a9a;
+}
+
+.match-info {
+    font-size: 14px;
+    color: #d0d0d0;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.match-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.players {
+    color: #ff7a00;
+    font-weight: 600;
+}
+
+.join-btn {
+    background-color: #ff7a00;
+    border: none;
+    padding: 12px 14px;
+    border-radius: 14px;
+    color: white;
+    font-weight: 600;
+}
+
+/* =========================
+   PROFILE PAGE
+========================= */
+
+.profile-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.profile-header {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+/* AVATAR WRAPPER */
+
+.avatar-wrapper {
+    position: relative;
+    width: 100px;
+    margin: 0 auto;
+}
+
+/* AVATAR */
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #ff7a00;
+    object-fit: cover;
+    background-color: #2a2a2a;
+}
+
+/* EDIT ICON */
+
+.edit-avatar {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: #ff7a00;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* TEXT */
+
+.profile-name {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.profile-sub {
+    font-size: 13px;
+    color: #888;
+}
+
+/* CARDS */
+
+.profile-card {
+    background-color: #1c1c1c;
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+/* STATS */
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.stat-number {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ff7a00;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #aaa;
+}
+
+/* =========================
+   MODAL (AVATAR PICKER)
+========================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: #1c1c1c;
+    padding: 18px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 320px;
+    text-align: center;
+}
+
+/* GRID */
+
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+}
+
+/* hide radio */
+
+.avatar-grid input {
+    display: none;
+}
+
+/* avatar images */
+
+.avatar-grid img {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    transition: 0.2s;
+}
+
+/* selected */
+
+.avatar-grid input:checked + img {
+    border: 2px solid #ff7a00;
+    transform: scale(1.05);
+}
+
+/* util */
+
+.muted {
+    color: #777;
+}
+
+/* =========================
+   FIFA CARD (OVR STYLE)
+========================= */
+
+.fifa-card {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 320px;
+    background: linear-gradient(145deg, #2b2b2b, #1a1a1a);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.fifa-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fifa-rating {
+    font-size: 48px;
+    font-weight: 800;
+    color: #ff7a00;
+}
+
+.fifa-position {
+    font-size: 14px;
+    color: #aaa;
+    font-weight: 600;
+    background: #222;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.fifa-name {
+    margin-top: 5px;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.fifa-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    margin: 10px 0;
+}
+
+.fifa-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fifa-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.match-status {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 6px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.6px;
+    margin-top: 8px;
+}
+
+.fulltime {
+    background: rgba(255,255,255,0.08);
+    color: #b0b0b0;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* =========================
+   PIXEL VERSION THEME
+========================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap");
+
+:root {
+    --pixel-bg: #0b2115;
+    --pixel-panel: #171717;
+    --pixel-grass: #123f24;
+    --pixel-cream: #fff4c7;
+    --pixel-gold: #ffcc33;
+    --pixel-orange: #ff7a00;
+    --pixel-lime: #71ff5a;
+    --pixel-ink: #080808;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background:
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        radial-gradient(circle at 50% 0%, #1b743a, var(--pixel-bg) 58%);
+    background-size: 18px 18px, 18px 18px, 100% 100%;
+    color: var(--pixel-cream);
+    font-family: "VT323", monospace;
+    font-size: 24px;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.06),
+        rgba(255,255,255,0.06) 1px,
+        transparent 1px,
+        transparent 5px
+    );
+    mix-blend-mode: soft-light;
+    opacity: 0.34;
+    z-index: 9999;
+}
+
+h1, h2, h3,
+.match-title,
+.bottom-nav a,
+button,
+.join-btn,
+.match-status {
+    font-family: "Press Start 2P", monospace;
+    letter-spacing: 0;
+}
+
+h1, h2, h3 {
+    color: var(--pixel-gold);
+    text-shadow: 4px 4px 0 #8a2a00;
+}
+
+.logo-container {
+    position: relative;
+    margin-top: 18px;
+}
+
+.logo-container::after {
+    content: "LVL 07 / XP 2400";
+    display: block;
+    width: max-content;
+    max-width: calc(100% - 28px);
+    margin: 8px auto 0;
+    padding: 8px 10px;
+    background: var(--pixel-ink);
+    border: 3px solid var(--pixel-cream);
+    color: var(--pixel-lime);
+    font-family: "Press Start 2P", monospace;
+    font-size: 10px;
+}
+
+.logo {
+    image-rendering: pixelated;
+    filter: drop-shadow(5px 5px 0 var(--pixel-ink));
+}
+
+.feed-container,
+.profile-container,
+.create-container,
+.stats-header,
+.stats-grid {
+    width: min(920px, calc(100% - 24px));
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.match-card,
+.profile-card,
+.fifa-card,
+.graph-card,
+.stats-card,
+.modal-content {
+    background: var(--pixel-panel);
+    border: 4px solid var(--pixel-ink);
+    border-radius: 0;
+    box-shadow: 6px 6px 0 var(--pixel-ink);
+}
+
+.match-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.match-card::before {
+    content: "QUEST";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 6px 8px;
+    background: var(--pixel-gold);
+    border: 3px solid var(--pixel-ink);
+    color: var(--pixel-ink);
+    font-family: "Press Start 2P", monospace;
+    font-size: 9px;
+}
+
+.match-title {
+    max-width: calc(100% - 86px);
+    color: var(--pixel-gold);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.match-time,
+.match-info,
+.profile-sub,
+.muted,
+.stat-label {
+    color: var(--pixel-cream);
+    font-size: 22px;
+}
+
+.match-status {
+    background: var(--pixel-ink);
+    border: 3px solid var(--pixel-cream);
+    border-radius: 0;
+    color: var(--pixel-lime);
+    font-size: 8px;
+}
+
+input,
+select {
+    background: var(--pixel-ink);
+    border: 3px solid var(--pixel-cream);
+    border-radius: 0;
+    color: var(--pixel-cream);
+    font-family: "VT323", monospace;
+    font-size: 24px;
+}
+
+button,
+.join-btn {
+    width: auto;
+    min-width: 130px;
+    background: var(--pixel-orange);
+    border: 4px solid var(--pixel-ink);
+    border-radius: 0;
+    box-shadow: 4px 4px 0 var(--pixel-ink);
+    color: white;
+    font-size: 10px;
+    line-height: 1.5;
+    text-align: center;
+    text-transform: uppercase;
+    transition: transform 0.15s steps(2), box-shadow 0.15s steps(2);
+}
+
+button:hover,
+.join-btn:hover,
+.fab:hover {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--pixel-ink);
+}
+
+.fab {
+    display: grid;
+    place-items: center;
+    background: var(--pixel-gold);
+    border: 4px solid var(--pixel-ink);
+    border-radius: 0;
+    box-shadow: 6px 6px 0 var(--pixel-ink);
+    color: var(--pixel-ink);
+    font-family: "Press Start 2P", monospace;
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1;
+    animation: pixelPulse 1s steps(2) infinite;
+}
+
+.bottom-nav {
+    left: 50%;
+    bottom: 12px;
+    width: min(680px, calc(100% - 24px));
+    transform: translateX(-50%);
+    background: var(--pixel-panel);
+    border: 4px solid var(--pixel-ink);
+    box-shadow: 6px 6px 0 var(--pixel-ink);
+    padding: 14px 8px;
+}
+
+.bottom-nav a {
+    color: var(--pixel-cream);
+    font-size: 9px;
+}
+
+.avatar,
+.avatar-grid img {
+    border-radius: 0;
+    image-rendering: pixelated;
+}
+
+.edit-avatar {
+    border: 3px solid var(--pixel-ink);
+    border-radius: 0;
+}
+
+.stat-number,
+.players,
+.big-stat,
+.overall-rating,
+.fifa-rating {
+    color: var(--pixel-lime);
+}
+
+@keyframes pixelPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+@media (max-width: 640px) {
+    body {
+        font-size: 21px;
+    }
+
+    .bottom-nav a,
+    button,
+    .join-btn {
+        font-size: 8px;
+    }
+
+    .match-footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+}

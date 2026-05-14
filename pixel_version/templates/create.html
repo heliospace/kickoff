@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <h1>TEST CREATE PAGE</h1>
+
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}"
+             class="logo"
+             alt="Kickoff Logo">
+    </div>
+
+    <div class="feed-container">
+
+        <!-- CREATE MATCH -->
+        <div class="match-card">
+
+            <div class="match-top">
+
+                <div>
+                    <div class="match-title">
+                        Create Match
+                    </div>
+
+                    <div class="match-time">
+                        Football or E-Football
+                    </div>
+                </div>
+
+                <span class="match-status">
+                    MATCH
+                </span>
+
+            </div>
+
+            <div class="match-info">
+                Start a regular football game or host an online e-football session nearby.
+            </div>
+
+            <div class="match-footer">
+
+                <span class="players">
+                    Community
+                </span>
+
+                <a href="/create_match"
+                   class="join-btn"
+                   style="text-decoration:none;">
+                    Create Match
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- CREATE SCREENING -->
+        <div class="match-card">
+
+            <div class="match-top">
+
+                <div>
+                    <div class="match-title">
+                        Create Screening
+                    </div>
+
+                    <div class="match-time">
+                        Watch Parties & Public Screenings
+                    </div>
+                </div>
+
+                <span class="match-status">
+                    SCREENING
+                </span>
+
+            </div>
+
+            <div class="match-info">
+                Host football screenings, café watch parties or rooftop screenings with booking links.
+            </div>
+
+            <div class="match-footer">
+
+                <span class="players">
+                    Fans
+                </span>
+
+                <a href="/create_screening"
+                   class="join-btn"
+                   style="text-decoration:none;">
+                    Create Screening
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="bottom-nav">
+        <a href="/">Home</a>
+        <a href="/matches">Feed</a>
+        <a href="/stats">Stats</a>
+        <a href="/profile">Profile</a>
+    </div>
+
+</body>
+</html>

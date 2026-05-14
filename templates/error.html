@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}"
+             class="logo"
+             alt="Kickoff Logo">
+    </div>
+
+    {% include "_flash.html" %}
+
+    <div class="error-shell">
+        <div class="error-card">
+            <div class="error-code">{{ title }}</div>
+            <p>{{ message }}</p>
+            <a href="{{ action_url }}" class="join-btn error-action">
+                {{ action_label }}
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

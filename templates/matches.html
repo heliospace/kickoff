@@ -1,39 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Matches</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matches - Kickoff</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
+
 <body>
-    <h1 style="text-align:center;">⚽ Matches</h1>
 
-    <div class="container">
-        <div class="left">
-
-            {% for match in matches %}
-                <div class="card">
-                    <b>📍 {{ match.location }}</b><br>
-                    ⏰ {{ match.time }} <br>
-
-                    👥 {{ match.joined|length }}/{{ match.players }}
-
-                    <br><br>
-
-                    <b>Players:</b><br>
-                    {% for player in match.joined %}
-                        {{ player }}<br>
-                    {% endfor %}
-
-                    <form action="/join/{{ match.id }}" method="post">
-                        <input type="text" name="name" placeholder="Your name">
-                        <button type="submit">Join</button>
-                    </form>
-                </div>
-            {% endfor %}
-
-        </div>
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}"
+             class="logo"
+             alt="Kickoff Logo">
     </div>
 
-    <a href="/">Back</a>
+    {% include "_flash.html" %}
+
+    <div class="feed-container">
+
+        {% if events %}
+
+            {% for event in events %}
+                {% if event.type == "match" %}
+                    {% set match = event.item %}
+                    {% include "_match_card.html" %}
+                {% else %}
+                    {% set screening = event.item %}
+                    {% include "_screening_card.html" %}
+                {% endif %}
+            {% endfor %}
+
+        {% else %}
+
+            <div class="match-card">
+                <div class="match-title">No events yet</div>
+                <div class="match-info">
+                    Create the first football match or screening nearby.
+                </div>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <a href="/create" class="fab">
+        +
+    </a>
+
+    <div class="bottom-nav">
+        <a href="/">Home</a>
+        <a href="/matches">Feed</a>
+        <a href="/stats">Stats</a>
+        <a href="/profile">Profile</a>
+    </div>
+
 </body>
 </html>

@@ -2,51 +2,77 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Kickoff - Home</title>
+    <title>Kickoff - Recents</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
 
-    <h1>⚽ Kickoff</h1>
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo" alt="Kickoff Logo">
+    </div>
 
-    <div class="container">
+    {% include "_flash.html" %}
 
-        <!-- CREATE MATCH CARD -->
-        <div class="card">
-            <h2>Create Match</h2>
+    <div class="feed-container">
 
-            <form action="/create_match" method="post">
-                <input type="text" name="location" placeholder="Location">
-                <input type="text" name="time" placeholder="Time (e.g. 2026-05-10)">
-                <input type="number" name="players" placeholder="Max Players (11)">
-                <button type="submit">Create Match</button>
-            </form>
+        <div class="home-section-title">
+            <h2>Live Now</h2>
+            <span>MVP preview</span>
         </div>
 
-        <!-- MATCHES CARD -->
-        <div class="card">
-            <h2>Matches</h2>
-            <a href="/matches" style="color:#ff7a00; text-decoration:none;">
-                View All Matches
-            </a>
+        <div class="live-score-strip">
+            {% for score in live_scores %}
+                <div class="live-score-card">
+                    <div class="live-score-top">
+                        <span class="score-status status-{{ score.status|lower }}">
+                            {{ score.status }}
+                        </span>
+                        <span class="score-minute">{{ score.minute }}</span>
+                    </div>
+
+                    <div class="score-teams">
+                        <span>{{ score.home }}</span>
+                        <strong>{{ score.home_score }} - {{ score.away_score }}</strong>
+                        <span>{{ score.away }}</span>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
 
-        <!-- STATS CARD -->
-        <div class="card">
-            <h2>Stats</h2>
-            <p>Matches Played: 0</p>
-            <p>Win Rate: --</p>
-        </div>
+        <h2>Recents</h2>
+
+        {% if events %}
+
+            {% for event in events %}
+                {% if event.type == "match" %}
+                    {% set match = event.item %}
+                    {% include "_match_card.html" %}
+                {% else %}
+                    {% set screening = event.item %}
+                    {% include "_screening_card.html" %}
+                {% endif %}
+            {% endfor %}
+
+        {% else %}
+
+            <div class="match-card">
+                <div class="match-title">No events yet</div>
+                <div class="match-info">
+                    Create the first football match or screening nearby.
+                </div>
+            </div>
+
+        {% endif %}
 
     </div>
 
-    <!-- BOTTOM NAV -->
+    <a href="/create" class="fab">+</a>
+
     <div class="bottom-nav">
         <a href="/">Home</a>
-        <a href="/matches">Matches</a>
+        <a href="/matches">Feed</a>
         <a href="/stats">Stats</a>
         <a href="/profile">Profile</a>
     </div>

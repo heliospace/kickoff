@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kickoff - Home</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo" alt="Kickoff Logo">
+    </div>
+
+    <div class="feed-container">
+
+        {% if matches %}
+
+            {% for match in matches %}
+
+                <div class="match-card">
+
+                    <div class="match-top">
+                        <div>
+                            <div class="match-title">Football Match</div>
+                            <div class="match-time">⏰ {{ match.time }}</div>
+                        </div>
+
+                        <span class="match-status">OPEN</span>
+                    </div>
+
+                    <div class="match-info">
+                        📍 {{ match.location }}<br>
+                        👥 {{ match.joined }}/{{ match.players }} players
+                    </div>
+
+                    <div class="match-footer">
+                        <span class="players">Available</span>
+
+                        <form action="/join/{{ match.id }}" method="POST">
+                            <button class="join-btn">Join</button>
+                        </form>
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="match-card">
+                <div class="match-title">No matches yet</div>
+                <div class="match-info">
+                    Create the first football match nearby.
+                </div>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <a href="/create" class="fab">+</a>
+
+    <div class="bottom-nav">
+        <a href="/">Home</a>
+        <a href="/matches">Feed</a>
+        <a href="/stats">Stats</a>
+        <a href="/profile">Profile</a>
+    </div>
+
+</body>
+</html>

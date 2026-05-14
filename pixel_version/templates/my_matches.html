@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Matches - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body class="profile-page">
+
+    <div class="profile-container">
+
+        <!-- HEADER -->
+        <div class="profile-header">
+
+            <div class="avatar"></div>
+
+            <div class="profile-name">
+                {{ user.username }}
+            </div>
+
+            <div class="profile-sub">
+                Joined Matches
+            </div>
+
+        </div>
+
+        <!-- STATS -->
+        <div class="card profile-card">
+
+            <div class="stat-row">
+                <div class="stat-number">
+                    {{ matches|length }}
+                </div>
+                <div class="stat-label">Matches Joined</div>
+            </div>
+
+            <div class="stat-row">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Wins</div>
+            </div>
+
+            <div class="stat-row">
+                <div class="stat-number">--</div>
+                <div class="stat-label">Win Rate</div>
+            </div>
+
+        </div>
+
+        <!-- MATCH HISTORY -->
+        <div class="card profile-card">
+
+            <h3 style="margin-bottom: 10px;">My Matches</h3>
+
+            {% if matches %}
+
+                {% for match in matches %}
+                    <div class="info-row">
+                        <span>{{ match.location }}</span>
+                        <span class="muted">{{ match.time }}</span>
+                    </div>
+                {% endfor %}
+
+            {% else %}
+                <div class="muted">You haven't joined any matches yet</div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</body>
+</html>

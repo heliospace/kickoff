@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Stats - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    {% include "_flash.html" %}
+
+    <div class="stats-page">
+
+        <div class="stats-header">
+            <h1>Your Stats</h1>
+            <p class="muted">{{ user.username if user else "Player" }} / Performance Overview</p>
+        </div>
+
+        <div class="level-card stats-level-card">
+            <div class="level-top">
+                <div>
+                    <div class="profile-card-kicker">Level {{ level }}</div>
+                    <div class="level-value">{{ xp }} XP</div>
+                </div>
+                <div class="level-sub">{{ level_progress }}/100 to next level</div>
+            </div>
+
+            <div class="level-bar">
+                <div class="level-fill" style="width: {{ level_progress }}%;"></div>
+            </div>
+        </div>
+
+        <div class="graph-card">
+            <div class="section-title">
+                <h2>Activity Mix</h2>
+                <span>{{ total_events_attended + matches_created + screenings_hosted }} total actions</span>
+            </div>
+            <div class="chart-wrap">
+                <canvas id="activityChart"></canvas>
+            </div>
+        </div>
+
+        <div class="player-rating-shell">
+
+            <div class="ultimate-card">
+                <div class="card-topline">
+                    <div>
+                        <div class="card-rating">{{ rating }}</div>
+                        <div class="card-position">{{ user.position or "PLY" }}</div>
+                    </div>
+                    <div class="card-level">LVL {{ level }}</div>
+                </div>
+
+                <div class="card-avatar">
+                    <img
+                        src="{{ url_for('static', filename='avatars/' + user.avatar) }}"
+                        alt="avatar"
+                    >
+                </div>
+
+                <div class="card-name">
+                    {{ (user.name or user.username)|upper }}
+                </div>
+
+                <div class="card-club">
+                    {{ user.favorite_club or "KICKOFF FC" }}
+                </div>
+
+                <div class="card-stat-grid">
+                    <div><strong>{{ pace }}</strong><span>PAC</span></div>
+                    <div><strong>{{ shooting }}</strong><span>SHO</span></div>
+                    <div><strong>{{ passing }}</strong><span>PAS</span></div>
+                    <div><strong>{{ dribbling }}</strong><span>DRI</span></div>
+                    <div><strong>{{ defending }}</strong><span>DEF</span></div>
+                    <div><strong>{{ physical }}</strong><span>PHY</span></div>
+                </div>
+            </div>
+
+            <div class="attribute-panel">
+                <div class="attribute-tabs">
+                    <span>Player Bio</span>
+                    <span>Player Details</span>
+                    <span class="active">Attribute Details</span>
+                </div>
+
+                <div class="attribute-title">Attribute Details</div>
+
+                <button class="attribute-info-btn" onclick="openStatsInfo()" aria-label="Show formula information">
+                    i
+                </button>
+
+                <div class="attribute-grid">
+                    <div class="attribute-col">
+                        <div class="attribute-head">PACE <strong>{{ pace }}</strong></div>
+                        <div class="attr-row"><span>Matches Joined</span><em>{{ matches_joined }}</em></div>
+                        <div class="attr-bar"><i style="width: {{ pace }}%;"></i></div>
+                        <div class="attr-row"><span>Events Attended</span><em>{{ total_events_attended }}</em></div>
+                        <div class="attr-bar"><i style="width: {{ activity }}%;"></i></div>
+                    </div>
+
+                    <div class="attribute-col">
+                        <div class="attribute-head">SHOOTING <strong>{{ shooting }}</strong></div>
+                        <div class="attr-row"><span>Matches Created</span><em>{{ matches_created }}</em></div>
+                        <div class="attr-bar"><i style="width: {{ shooting }}%;"></i></div>
+                        <div class="attr-row"><span>Spots Filled</span><em>{{ available_spots_filled }}</em></div>
+                        <div class="attr-bar"><i style="width: {{ community }}%;"></i></div>
+                    </div>
+
+                    <div class="attribute-col">
+                        <div class="attribute-head">PASSING <strong>{{ passing }}</strong></div>
+                        <div class="attr-row"><span>Created</span><em>{{ matches_created }}</em></div>
+                        <div class="attr-bar"><i style="width: {{ playmaking }}%;"></i></div>
+                        <div class="attr-row"><span>Screenings</span><em>{{ screenings_hosted }}</em></div>
+                        <div class="attr-bar"><i style="width: {{ hosting }}%;"></i></div>
+                    </div>
+
+                    <div class="attribute-col">
+                        <div class="attribute-head">PHYSICAL <strong>{{ physical }}</strong></div>
+                        <div class="attr-row"><span>Activity</span><em>{{ activity }}</em></div>
+                        <div class="attr-bar"><i style="width: {{ activity }}%;"></i></div>
+                        <div class="attr-row"><span>XP</span><em>{{ xp }}</em></div>
+                        <div class="attr-bar"><i style="width: {{ level_progress }}%;"></i></div>
+                    </div>
+                </div>
+
+                <p class="rating-formula">
+                    Rating = 50 + created matches x4 + joined matches x3 + screenings hosted x4 + spots filled. Capped at 99.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stats-card">
+                <div class="big-stat">{{ matches_created }}</div>
+                <div class="stat-text">Matches Created</div>
+            </div>
+
+            <div class="stats-card">
+                <div class="big-stat">{{ matches_joined }}</div>
+                <div class="stat-text">Matches Joined</div>
+            </div>
+
+            <div class="stats-card">
+                <div class="big-stat">{{ screenings_hosted }}</div>
+                <div class="stat-text">Screenings Hosted</div>
+            </div>
+
+            <div class="stats-card">
+                <div class="big-stat">{{ total_events_attended }}</div>
+                <div class="stat-text">Events Attended</div>
+            </div>
+
+            <div class="stats-card">
+                <div class="big-stat">{{ available_spots_filled }}</div>
+                <div class="stat-text">Spots Filled</div>
+            </div>
+
+            <div class="stats-card">
+                <div class="big-stat">{{ total_matches }}</div>
+                <div class="stat-text">Total App Matches</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="statsInfoModal" class="modal hidden">
+        <div class="modal-content stats-info-modal">
+            <h3>Rating Formula</h3>
+
+            <div class="formula-list">
+                <p><strong>Rating</strong> = 50 + created matches x4 + joined matches x3 + screenings hosted x4 + spots filled. Capped at 99.</p>
+                <p><strong>XP</strong> = created matches x20 + joined matches x10 + screenings hosted x20.</p>
+                <p><strong>Level</strong> = every 100 XP increases your level.</p>
+                <p><strong>PAC</strong> rewards joining and attending.</p>
+                <p><strong>SHO</strong> rewards creating matches and filling spots.</p>
+                <p><strong>PAS</strong> reflects playmaking through hosted activity.</p>
+                <p><strong>DRI</strong> rewards active participation.</p>
+                <p><strong>DEF</strong> rewards reliability and filled squads.</p>
+                <p><strong>PHY</strong> rewards overall activity volume.</p>
+            </div>
+
+            <button type="button" class="secondary-btn" onclick="closeStatsInfo()">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="/">Home</a>
+        <a href="/matches">Feed</a>
+        <a href="/stats">Stats</a>
+        <a href="/profile">Profile</a>
+    </div>
+
+    <script>
+        function openStatsInfo() {
+            document.getElementById("statsInfoModal").classList.remove("hidden");
+        }
+
+        function closeStatsInfo() {
+            document.getElementById("statsInfoModal").classList.add("hidden");
+        }
+
+        const ctx = document.getElementById('activityChart');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Created', 'Joined', 'Screenings', 'Spots'],
+                datasets: [{
+                    label: 'Activity',
+                    data: [
+                        {{ matches_created }},
+                        {{ matches_joined }},
+                        {{ screenings_hosted }},
+                        {{ available_spots_filled }}
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 122, 0, 0.9)',
+                        'rgba(255, 180, 86, 0.85)',
+                        'rgba(184, 76, 255, 0.9)',
+                        'rgba(70, 210, 140, 0.85)'
+                    ],
+                    borderRadius: 12,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#aaa' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255,255,255,0.06)' },
+                        ticks: {
+                            color: '#aaa',
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

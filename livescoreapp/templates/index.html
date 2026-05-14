@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Score</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 24px 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #111;
+            color: white;
+            text-align: center;
+        }
+
+        .message {
+            color: #ffb86b;
+            margin: 16px auto;
+            width: min(90%, 720px);
+        }
+
+        .league {
+            width: min(92%, 760px);
+            margin: 26px auto;
+            text-align: left;
+        }
+
+        .league h2 {
+            color: #ff7a00;
+            margin: 0 0 8px;
+            text-align: left;
+        }
+
+        .match {
+            background: #222;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .score {
+            color: #ff7a00;
+            font-size: 22px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Live Matches</h1>
+
+{% if message %}
+    <p class="message">{{ message }}</p>
+{% endif %}
+
+{% if league_sections %}
+    {% for section in league_sections %}
+        <section class="league">
+            <h2>{{ section["name"] }}</h2>
+
+            {% if section["message"] %}
+                <p class="message">{{ section["message"] }}</p>
+            {% endif %}
+
+            {% if section["matches"] %}
+                {% for m in section["matches"] %}
+                    <div class="match">
+                        <h3>
+                            {{ m["teams"]["home"]["name"] }}
+                            vs
+                            {{ m["teams"]["away"]["name"] }}
+                        </h3>
+
+                        <p class="score">
+                            {{ m["goals"]["home"] if m["goals"]["home"] is not none else "-" }}
+                            :
+                            {{ m["goals"]["away"] if m["goals"]["away"] is not none else "-" }}
+                        </p>
+
+                        <p>Status: {{ m["fixture"]["status"]["long"] }}</p>
+                        <p>{{ m["league"]["name"] }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="match">
+                    <h3>No matches available</h3>
+                    <p>Check your API key, quota, or try again later.</p>
+                </div>
+            {% endif %}
+        </section>
+    {% endfor %}
+{% else %}
+    <div class="match">
+        <h3>No matches available</h3>
+        <p>Check your API key, quota, or try again later.</p>
+    </div>
+{% endif %}
+
+</body>
+</html>

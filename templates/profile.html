@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body class="profile-page">
+
+    {% include "_flash.html" %}
+
+    <div class="profile-container">
+
+        <div class="profile-header">
+
+            <div class="avatar-wrapper">
+
+                <img
+                    src="{{ url_for('static', filename='avatars/' + user.avatar) }}"
+                    class="avatar"
+                    alt="avatar"
+                >
+
+                <div class="edit-avatar" onclick="openAvatarPicker()" aria-label="Edit avatar">
+                    <span class="pixel-pencil"></span>
+                </div>
+
+            </div>
+
+            <div class="profile-name">
+                {{ user.name or "Add your name" }}
+            </div>
+
+            <div class="profile-username">
+                @{{ user.username }}
+            </div>
+
+            <div class="profile-sub">
+                {{ user.position or "Add player position" }}
+                {% if user.location %}
+                    / {{ user.location }}
+                {% endif %}
+            </div>
+
+            <button class="edit-profile-btn" onclick="openProfileEditor()">
+                Edit Profile
+            </button>
+
+        </div>
+
+        <div class="profile-grid">
+
+            <div class="profile-card club-card">
+                <div class="profile-card-kicker">Club Identity</div>
+
+                <div class="club-row">
+                    <div class="club-logo">
+                        {{ (user.favorite_club[:1] if user.favorite_club else "K")|upper }}
+                    </div>
+
+                    <div>
+                        <div class="club-name">
+                            {{ user.favorite_club or "Add favorite club" }}
+                        </div>
+                        <div class="club-label">
+                            {{ user.fan_label or "Add supporter label" }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card level-card">
+                <div class="profile-card-kicker">Player Level</div>
+
+                <div class="level-value">
+                    {{ user.player_level or "Beginner" }}
+                </div>
+
+                <div class="level-sub">
+                    {{ user.position or "Position not set" }}
+                </div>
+            </div>
+
+        </div>
+
+        <details class="activity-panel">
+
+            <summary>
+                Your Activity
+            </summary>
+
+            <div class="activity-content">
+
+                <div class="activity-block">
+                    <h3>Matches Hosted</h3>
+
+                    {% if user_matches %}
+
+                        {% for match in user_matches %}
+                            <div class="activity-row">
+                                <span>{{ match.location }}</span>
+                                <span>{{ match.display_time }}</span>
+                            </div>
+                        {% endfor %}
+
+                    {% else %}
+                        <div class="muted">No matches hosted yet</div>
+                    {% endif %}
+                </div>
+
+                <div class="activity-block">
+                    <h3>Parties Created</h3>
+
+                    {% if hosted_screenings %}
+
+                        {% for screening in hosted_screenings %}
+                            <div class="activity-row">
+                                <span>{{ screening.match_name }}</span>
+                                <span>{{ screening.display_time }}</span>
+                            </div>
+                        {% endfor %}
+
+                    {% else %}
+                        <div class="muted">No screenings created yet</div>
+                    {% endif %}
+                </div>
+
+                <div class="activity-block">
+                    <h3>Joined Match History</h3>
+
+                    {% if joined_matches %}
+
+                        {% for match in joined_matches %}
+                            <div class="activity-row">
+                                <span>{{ match.location }}</span>
+                                <span>{{ match.display_time }}</span>
+                            </div>
+                        {% endfor %}
+
+                    {% else %}
+                        <div class="muted">No joined matches yet</div>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </details>
+
+        <a href="/logout" class="logout-btn">
+            Logout
+        </a>
+
+    </div>
+
+    <div id="profileEditorModal" class="modal hidden">
+
+        <div class="modal-content">
+            <h3>Edit Profile</h3>
+
+            <form method="POST" action="/update_profile">
+                <label class="input-label">Name</label>
+                <input
+                    type="text"
+                    name="name"
+                    value="{{ user.name or '' }}"
+                    placeholder="Your name"
+                >
+
+                <label class="input-label">Username</label>
+                <input
+                    type="text"
+                    value="{{ user.username }}"
+                    disabled
+                >
+
+                <label class="input-label">Player Position</label>
+                <input
+                    type="text"
+                    name="position"
+                    value="{{ user.position or '' }}"
+                    placeholder="e.g. Striker, Midfielder, Goalkeeper"
+                >
+
+                <label class="input-label">Location</label>
+                <input
+                    type="text"
+                    name="location"
+                    value="{{ user.location or '' }}"
+                    placeholder="e.g. Mumbai, Bandra"
+                >
+
+                <label class="input-label">Favorite Club</label>
+                <input
+                    type="text"
+                    name="favorite_club"
+                    value="{{ user.favorite_club or '' }}"
+                    placeholder="e.g. Barcelona"
+                >
+
+                <label class="input-label">Supporter Label</label>
+                <input
+                    type="text"
+                    name="fan_label"
+                    value="{{ user.fan_label or '' }}"
+                    placeholder="e.g. Culer, Madridista, Gooner"
+                >
+
+                <label class="input-label">Player Level</label>
+                <select name="player_level">
+                    {% set current_level = user.player_level or "Beginner" %}
+                    {% for level in ["Beginner", "Casual", "Regular", "Pro"] %}
+                        <option value="{{ level }}" {% if current_level == level %}selected{% endif %}>
+                            {{ level }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit">
+                    Save Profile
+                </button>
+
+                <button type="button" class="secondary-btn" onclick="closeProfileEditor()">
+                    Cancel
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <div id="avatarModal" class="modal hidden">
+
+        <div class="modal-content">
+
+            <h3>Select Avatar</h3>
+
+            <form method="POST" action="/update_avatar">
+
+                <div class="avatar-grid">
+
+                    <label>
+                        <input type="radio" name="avatar" value="barca.png">
+                        <img src="{{ url_for('static', filename='avatars/barca.png') }}">
+                    </label>
+
+                    <label>
+                        <input type="radio" name="avatar" value="realmadrid.png">
+                        <img src="{{ url_for('static', filename='avatars/realmadrid.png') }}">
+                    </label>
+
+                    <label>
+                        <input type="radio" name="avatar" value="juventus.png">
+                        <img src="{{ url_for('static', filename='avatars/juventus.png') }}">
+                    </label>
+
+                    <label>
+                        <input type="radio" name="avatar" value="italy.png">
+                        <img src="{{ url_for('static', filename='avatars/italy.png') }}">
+                    </label>
+
+                    <label>
+                        <input type="radio" name="avatar" value="portugal.png">
+                        <img src="{{ url_for('static', filename='avatars/portugal.png') }}">
+                    </label>
+
+                </div>
+
+                <button type="submit">Save</button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+<script>
+    function openProfileEditor() {
+        document.getElementById("profileEditorModal").classList.remove("hidden");
+    }
+
+    function closeProfileEditor() {
+        document.getElementById("profileEditorModal").classList.add("hidden");
+    }
+
+    function openAvatarPicker() {
+        document.getElementById("avatarModal").classList.remove("hidden");
+    }
+
+    function closeAvatarPicker() {
+        document.getElementById("avatarModal").classList.add("hidden");
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<div class="match-card active-match">
+
+    <div class="match-top">
+        <div>
+            <div class="match-title">
+                Football Match
+            </div>
+
+            <div class="match-time">
+                {{ match.display_time }}
+            </div>
+        </div>
+
+        {% if match.joined >= match.players %}
+            <span class="match-status fulltime">
+                FULL
+            </span>
+        {% else %}
+            <span class="match-status">
+                OPEN
+            </span>
+        {% endif %}
+    </div>
+
+    <div class="match-info">
+        Location: {{ match.location }}
+    </div>
+
+    <div class="match-info">
+        Spots: {{ match.joined }}/{{ match.players }} players
+    </div>
+
+    <div class="match-info">
+        Joined:
+        {% set names = participant_names.get(match.id, []) %}
+        {% if names %}
+            {{ names|join(", ") }}
+        {% else %}
+            No players yet
+        {% endif %}
+    </div>
+
+    <div class="match-footer">
+        <span class="players">
+            {{ match.players - match.joined }} spots left
+        </span>
+
+        <div class="match-actions">
+            <a href="/match/{{ match.id }}/lineup" class="lineup-link">
+                View Lineup
+            </a>
+
+            {% if match.id in joined_match_ids %}
+                <button class="join-btn full" disabled>
+                    Joined
+                </button>
+            {% elif match.joined >= match.players %}
+                <button class="join-btn full" disabled>
+                    Full
+                </button>
+            {% else %}
+                <form action="/join/{{ match.id }}" method="POST">
+                    <button class="join-btn">
+                        Join Match
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+</div>

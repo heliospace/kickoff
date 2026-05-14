@@ -1,0 +1,57 @@
+<div class="match-card screening-card">
+
+    <div class="match-top">
+        <div>
+            <div class="match-title">
+                {{ screening.match_name }}
+            </div>
+
+            <div class="match-time">
+                {{ screening.display_time }}
+            </div>
+        </div>
+
+        <span class="match-status screening-status">
+            SCREENING
+        </span>
+    </div>
+
+    <div class="match-info">
+        Location: {{ screening.location }}
+    </div>
+
+    <div class="match-info">
+        Seats: {{ screening.seats }}
+        {% if screening.entry_type %}
+            / {{ screening.entry_type }}
+        {% endif %}
+        {% if screening.price %}
+            / {{ screening.price }}
+        {% endif %}
+    </div>
+
+    <div class="match-info">
+        Hosted by:
+        {{ screening_hostnames.get(screening.user_id, "Unknown") }}
+    </div>
+
+    <div class="match-footer">
+        <span class="players screening-players">
+            Watch Party
+        </span>
+
+        {% if screening.booking_link %}
+            <a href="{{ screening.booking_link }}"
+               class="join-btn screening-btn"
+               target="_blank"
+               rel="noopener noreferrer">
+                Book
+            </a>
+        {% else %}
+            <button class="join-btn screening-btn" disabled>
+                No Link
+            </button>
+        {% endif %}
+    </div>
+
+</div>

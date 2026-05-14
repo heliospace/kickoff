@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Kickoff</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body class="profile-page">
+
+    <div class="profile-container">
+
+        <!-- HEADER -->
+        <div class="profile-header">
+
+            <!-- AVATAR + EDIT ICON -->
+            <div class="avatar-wrapper">
+
+                <img 
+                    src="{{ url_for('static', filename='avatars/' + user.avatar) }}" 
+                    class="avatar"
+                    alt="avatar"
+                >
+
+                <!-- EDIT ICON -->
+                <div class="edit-avatar" onclick="openAvatarPicker()">
+                    ✏️
+                </div>
+
+            </div>
+
+            <!-- USERNAME -->
+            <div class="profile-name">
+                {{ user.username }}
+            </div>
+
+            <div class="profile-sub">
+                Football Player
+            </div>
+
+        </div>
+
+        <!-- STATS -->
+        <div class="profile-card">
+
+            <div class="stat-row">
+                <div class="stat-number">
+                    {{ user_matches|length }}
+                </div>
+                <div class="stat-label">Matches Created</div>
+            </div>
+
+            <div class="stat-row">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Wins</div>
+            </div>
+
+            <div class="stat-row">
+                <div class="stat-number">--</div>
+                <div class="stat-label">Win Rate</div>
+            </div>
+
+        </div>
+
+        <!-- MATCH HISTORY -->
+        <div class="profile-card">
+
+            <h3 style="margin-bottom: 10px;">Your Matches</h3>
+
+            {% if user_matches %}
+
+                {% for match in user_matches %}
+                    <div class="info-row">
+                        <span>{{ match.location }}</span>
+                        <span class="muted">{{ match.time }}</span>
+                    </div>
+                {% endfor %}
+
+            {% else %}
+                <div class="muted">No matches created yet</div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         AVATAR PICKER MODAL
+    ========================== -->
+
+    <div id="avatarModal" class="modal hidden">
+
+        <div class="modal-content">
+
+            <h3>Select Avatar</h3>
+
+            <form method="POST" action="/update_avatar">
+
+                <div class="avatar-grid">
+
+                    <label>
+                        <input type="radio" name="avatar" value="barca.png">
+                        <img src="{{ url_for('static', filename='avatars/barca.png') }}">
+                    </label>
+
+                    <label>
+                        <input type="radio" name="avatar" value="realmadrid.png">
+                        <img src="{{ url_for('static', filename='avatars/realmadrid.png') }}">
+                    </label>
+
+                    <label>
+                        <input type="radio" name="avatar" value="juventus.png">
+                        <img src="{{ url_for('static', filename='avatars/juventus.png') }}">
+                    </label>
+
+                    <label>
+                        <input type="radio" name="avatar" value="italy.png">
+                        <img src="{{ url_for('static', filename='avatars/italy.png') }}">
+                    </label>
+
+                    <label>
+                        <input type="radio" name="avatar" value="portugal.png">
+                        <img src="{{ url_for('static', filename='avatars/portugal.png') }}">
+                    </label>
+
+                </div>
+
+                <button type="submit">Save</button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- SCRIPT -->
+<script>
+    function openAvatarPicker() {
+        document.getElementById("avatarModal").classList.remove("hidden");
+    }
+
+    function closeAvatarPicker() {
+        document.getElementById("avatarModal").classList.add("hidden");
+    }
+</script>
+
+</body>
+</html>
